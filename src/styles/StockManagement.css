@@ -1,0 +1,106 @@
+.stock-product-table {
+    width: 95%;
+    border-collapse: collapse;
+    margin: 20px 10px;
+  }
+
+  .stock-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-top: 1.3rem;
+  }
+  
+  .stock-add-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .stock-add-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .stock-product-table th,
+  .stock-product-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .stock-product-table th {
+    background-color: #f2f2f2;
+    color: black;
+  }
+  
+  .stock-product-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  
+  .stock-available-types {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .stock-type-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  
+  .stock-type-dot.black {
+    background-color: black;
+  }
+  
+  .stock-type-dot.gray {
+    background-color: gray;
+  }
+  
+  .stock-type-dot.pink {
+    background-color: pink;
+  }
+  
+  .stock-type-dot.blue {
+    background-color: blue;
+  }
+  
+  .stock-type-dot.yellow {
+    background-color: yellow;
+  }
+  
+  .stock-type-dot.maroon {
+    background-color: maroon;
+  }
+  
+  .stock-type-dot.navy {
+    background-color: navy;
+  }
+  
+  .stock-action-icons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .stock-edit-icon,
+  .stock-delete-icon {
+    cursor: pointer;
+  }
+  
+  .stock-edit-icon {
+    color: #007bff;
+  }
+  
+  .stock-delete-icon {
+    color: #dc3545;
+  }
+  
