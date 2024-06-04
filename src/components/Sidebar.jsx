@@ -15,7 +15,7 @@ import {
   FaTable,
   FaCog,
   FaSignOutAlt,
-  FaBars
+  FaBars,
 } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 
@@ -34,16 +34,30 @@ const Sidebar = () => {
       <div className={`sidebar-container ${isOpen ? "open" : ""}`}>
         <div className="sidebar-logo">SALOON</div>
         <div className="sidebar-menu-section">
-          <NavLink to="/" className="navlink">
-            <MenuItem icon={<FaHome />} label="Dashboard" active />
+          <NavLink
+            to="/"
+            className={({ isActive }) => (isActive ? "navlink active" : "navlink")}
+          >
+            <MenuItem icon={<FaHome />} label="Dashboard" />
           </NavLink>
-          <NavLink to = "/appointment" className="navlink">
+          <NavLink
+            to="/appointment"
+            className={({ isActive }) => (isActive ? "navlink active" : "navlink")}
+          >
             <MenuItem icon={<FaCalendar />} label="Appointment" />
           </NavLink>
-          <MenuItem icon={<FaCalendar />} label="Calendar" />
+          <NavLink
+            to="/calendar"
+            className={({ isActive }) => (isActive ? "navlink active" : "navlink")}
+          >
+            <MenuItem icon={<FaCalendar />} label="Calendar" />
+          </NavLink>
           <MenuItem icon={<FaEnvelope />} label="Inbox" />
           <MenuItem icon={<FaClipboardList />} label="Order Lists" />
-          <NavLink to = "/stockmanagement" className = "navlink">
+          <NavLink
+            to="/stockmanagement"
+            className={({ isActive }) => (isActive ? "navlink active" : "navlink")}
+          >
             <MenuItem icon={<FaBoxOpen />} label="Product Stock" />
           </NavLink>
         </div>
@@ -67,8 +81,8 @@ const Sidebar = () => {
   );
 };
 
-const MenuItem = ({ icon, label, active }) => (
-  <div className={`sidebar-menu-item ${active ? "active" : ""}`}>
+const MenuItem = ({ icon, label }) => (
+  <div className="sidebar-menu-item">
     {icon}
     <span>{label}</span>
   </div>

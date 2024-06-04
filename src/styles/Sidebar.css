@@ -12,7 +12,7 @@
     z-index: 1000;
 }
 
-.sidebar-logo{
+.sidebar-logo {
     width: 100%;
     font-size: 2rem;
     font-weight: 500;
@@ -47,7 +47,7 @@
     background-color: #f0f0f0;
 }
 
-.sidebar-menu-item.active {
+.navlink.active .sidebar-menu-item {
     background-color: #007bff;
     color: #fff;
 }
@@ -59,7 +59,6 @@
 .sidebar-menu-item .fa-icon {
     font-size: 16px;
 }
-
 
 .hamburger-icon {
     display: none;

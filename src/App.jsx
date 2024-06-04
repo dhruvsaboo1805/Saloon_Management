@@ -6,6 +6,7 @@ import { Suspense, lazy } from "react";
 import Loader from "./components/Loader";
 import Appointment from "./pages/Appointment";
 import StocksManagement from "./pages/StocksManagement";
+import SaloonCalender from "./pages/SaloonCalender";
 
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 
@@ -22,6 +23,7 @@ function App() {
             <Route exact path="/" element={<Dashboard />}></Route>
             <Route exact path="/appointment" element={<Appointment />}></Route>
             <Route exact path="/stockmanagement" element={<StocksManagement />}></Route>
+            <Route exact path="/calender" element={<SaloonCalender />}></Route>
           </Routes>
         </Suspense>
       </div>
