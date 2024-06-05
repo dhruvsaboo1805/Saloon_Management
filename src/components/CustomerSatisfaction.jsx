@@ -30,7 +30,7 @@ const CustomerSatisfaction = ({ data }) => {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top',
+        position: 'bottom',
       },
       tooltip: {
         callbacks: {

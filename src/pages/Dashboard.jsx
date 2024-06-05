@@ -57,7 +57,7 @@ const Dashboard = () => {
 
       <div className="dashboard-chart-customer-container">
         <CustomerInsight data={insightData} />
-        <CustomerSatisfaction data={satisfactionData} />
+        {/* <CustomerSatisfaction data={satisfactionData} /> */}
       </div>
 
       <div className="dashboard-chart-revenue-container">

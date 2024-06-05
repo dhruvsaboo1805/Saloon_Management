@@ -36,19 +36,63 @@ const Sidebar = () => {
         <div className="sidebar-menu-section">
           <NavLink
             to="/"
-            className={({ isActive }) => (isActive ? "navlink active" : "navlink")}
+            className={({ isActive }) =>
+              isActive ? "navlink active" : "navlink"
+            }
           >
             <MenuItem icon={<FaHome />} label="Dashboard" />
           </NavLink>
-          <NavLink
+
+          {/* <NavLink
             to="/appointment"
             className={({ isActive }) => (isActive ? "navlink active" : "navlink")}
           >
             <MenuItem icon={<FaCalendar />} label="Appointment" />
-          </NavLink>
+          </NavLink> */}
+
+          <div className="sidebar-menu-section">
+            <div className="sidebar-section-title">APPOINTMENTS</div>
+            <NavLink
+              to="/pendingappointment"
+              className={({ isActive }) =>
+                isActive ? "navlink active" : "navlink"
+              }
+            >
+              <MenuItem icon={<FaTags />} label="Pending Appointments" />
+            </NavLink>
+            <NavLink
+              to="/ConfirmedAppointments"
+              className={({ isActive }) =>
+                isActive ? "navlink active" : "navlink"
+              }
+            >
+              <MenuItem icon={<FaCalendar />} label="Confirmed Appointments" />
+            </NavLink>
+            <NavLink
+              to="/CheckInAppointments"
+              className={({ isActive }) =>
+                isActive ? "navlink active" : "navlink"
+              }
+            >
+              <MenuItem
+                icon={<FaCheckSquare />}
+                label="Checked-In Appointmnets"
+              />
+            </NavLink>
+            <NavLink
+              to="/PaidAppointments"
+              className={({ isActive }) =>
+                isActive ? "navlink active" : "navlink"
+              }
+            >
+              <MenuItem icon={<FaPhone />} label="Paid Appointments" />
+            </NavLink>
+          </div>
           <NavLink
             to="/calendar"
-            className={({ isActive }) => (isActive ? "navlink active" : "navlink")}
+            className={({ isActive }) =>
+              isActive ? "navlink active" : "navlink"
+            }
           >
             <MenuItem icon={<FaCalendar />} label="Calendar" />
           </NavLink>
@@ -56,7 +100,9 @@ const Sidebar = () => {
           <MenuItem icon={<FaClipboardList />} label="Order Lists" />
           <NavLink
             to="/stockmanagement"
-            className={({ isActive }) => (isActive ? "navlink active" : "navlink")}
+            className={({ isActive }) =>
+              isActive ? "navlink active" : "navlink"
+            }
           >
             <MenuItem icon={<FaBoxOpen />} label="Product Stock" />
           </NavLink>

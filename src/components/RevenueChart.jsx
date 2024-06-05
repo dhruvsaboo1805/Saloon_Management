@@ -55,7 +55,7 @@ const RevenueChart = () => {
   };
 
   return (
-    <div>
+    <div className='revenue-chart-container'>
       <h2>Revenue</h2>
       <Line data={data} options={options} />
     </div>

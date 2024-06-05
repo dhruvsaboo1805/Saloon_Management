@@ -1,35 +1,37 @@
 import React from "react";
 import { useTable } from "react-table";
-import "../styles/Appointment.css";
-import data from "../../AppointmentsData";
+import "../styles/PendingAppointment.css";
+import data from "../../PendingAppointmentsData";
+import { IoIosArrowDown } from "react-icons/io";
 
-const Appointment = () => {
+const PendingAppointment = () => {
   const columns = React.useMemo(
     () => [
-
-    // service name should be used later by chirag
-    //   {
-    //     Header: "Service Name",
-    //     accessor: "serviceName",
-    //     Cell: ({ value }) => (
-    //       <div className="service-cell">
-    //         <span
-    //           className={`dot ${value.toLowerCase().replace(" ", "-")}`}
-    //         ></span>
-    //         {value}
-    //       </div>
-    //     ),
-    //   },
+      {
+        Header: "Service Name",
+        accessor: "serviceName",
+        Cell: ({ value }) => (
+          <div className="pending-appt-service-list">
+            {value.map((service, index) => (
+              <span key={index} className="pending-appt-service-item">{service}</span>
+            ))}
+          </div>
+        ),
+      },
       {
         Header: "Client Name",
         accessor: "clientName",
+      },
+      {
+        Header: "Contact",
+        accessor: "contact",
       },
       {
         Header: "Date - Time",
         accessor: "dateTime",
       },
       {
-        Header: "Worker Name",
+        Header: "Preferred Worker",
         accessor: "workerName",
       },
       {
@@ -37,22 +39,18 @@ const Appointment = () => {
         accessor: "duration",
       },
       {
-        Header: "Amount",
-        accessor: "amount",
-      },
-      {
-        Header: "Service Status",
-        accessor: "serviceStatus",
-        Cell: ({ value }) => (
-          <span className={`status-badge ${value.toLowerCase()}`}>{value}</span>
+        Header: "Assign Employee",
+        accessor: "assignEmployee",
+        Cell: () => (
+          <button className="pending-appt-assign-btn">
+            Assign <IoIosArrowDown />
+          </button>
         ),
       },
       {
-        Header: "Payment Status",
-        accessor: "paymentStatus",
-        Cell: ({ value }) => (
-          <span className={`status-badge ${value.toLowerCase()}`}>{value}</span>
-        ),
+        Header: "Cancel",
+        accessor: "cancel",
+        Cell: () => <button className="pending-appt-cancel-btn">Cancel</button>,
       },
     ],
     []
@@ -65,12 +63,12 @@ const Appointment = () => {
     });
 
   return (
-    <div className="appointments-container">
-      <div className="appointments-header">
-        <h2>Appointments</h2>
-        <button className="add-appointment-btn">Add a new Appointment</button>
+    <div className="pending-appointments-container">
+      <div className="pending-appointments-header">
+        <h2>Pending Appointments</h2>
+        <button className="pending-add-appointment-btn">Add a new Appointment</button>
       </div>
-      <table {...getTableProps()} className="appointments-table">
+      <table {...getTableProps()} className="pending-appointments-table">
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -97,4 +95,4 @@ const Appointment = () => {
   );
 };
 
-export default Appointment;
+export default PendingAppointment;

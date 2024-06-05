@@ -1,0 +1,66 @@
+.confirm-appointments-container {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  .confirm-appointments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .confirm-appointments-header h2 {
+    font-size: 24px;
+    margin: 0;
+  }
+  
+  .confirm-appointments-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .confirm-appointments-table thead {
+    background-color: #f8f9fa;
+  }
+  
+  .confirm-appointments-table th, .confirm-appointments-table td {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  .confirm-appointments-table th {
+    font-weight: bold;
+  }
+  
+  .confirm-appt-service-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  
+  .confirm-appt-service-item {
+    background-color: #e9ecef;
+    color: #495057;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .confirm-appt-checkin-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .confirm-appt-checkin-btn:hover {
+    background-color: #0056b3;
+  }
+  
