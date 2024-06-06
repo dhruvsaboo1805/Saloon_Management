@@ -15,6 +15,8 @@ const SignUp = lazy(() => import("./pages/SignUp"));
 const ConfirmedAppointments = lazy(() => import("./pages/ConfirmedAppointments"));
 const CheckInAppointments = lazy(() => import("./pages/CheckInAppointments"));
 const PaidAppointments = lazy(() => import("./pages/PaidAppointments"));
+const AppointmentForm = lazy(() => import("./pages/AppointmentForm"));
+const WorkerAppointment = lazy(() => import("./pages/WorkerAppointment"));
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
             <Route exact path="/ConfirmedAppointments" element={<ConfirmedAppointments />}></Route>
             <Route exact path="/CheckInAppointments" element={<CheckInAppointments />}></Route>
             <Route exact path="/PaidAppointments" element={<PaidAppointments />}></Route>
+            <Route exact path="/AppointmentForm" element={<AppointmentForm />}></Route>
+            <Route exact path="/WorkerAppointment" element={<WorkerAppointment />}></Route>
           </Routes>
         </Suspense>
       </div>

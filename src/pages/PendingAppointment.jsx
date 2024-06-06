@@ -3,6 +3,7 @@ import { useTable } from "react-table";
 import "../styles/PendingAppointment.css";
 import data from "../../PendingAppointmentsData";
 import { IoIosArrowDown } from "react-icons/io";
+import { NavLink } from "react-router-dom";
 
 const PendingAppointment = () => {
   const columns = React.useMemo(
@@ -66,7 +67,9 @@ const PendingAppointment = () => {
     <div className="pending-appointments-container">
       <div className="pending-appointments-header">
         <h2>Pending Appointments</h2>
-        <button className="pending-add-appointment-btn">Add a new Appointment</button>
+        <NavLink to = "/AppointmentForm" className="navlink">
+          <button className="pending-add-appointment-btn">Add a new Appointment</button>
+        </NavLink>
       </div>
       <table {...getTableProps()} className="pending-appointments-table">
         <thead>
