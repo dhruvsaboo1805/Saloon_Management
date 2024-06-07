@@ -1,9 +1,9 @@
 import React from "react";
 import "../styles/AppointmentForm.css";
 import { useState, useEffect } from "react";
-// import { MultiSelect } from "react-multi-select-component";
 import Select from "react-select";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import {
   FaUser,
   FaEnvelope,
@@ -15,7 +15,6 @@ import {
   FaVenusMars,
 } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-import Loader from "../components/Loader";
 
 const AppointmentForm = () => {
   const [minDate, setMinDate] = useState("");
@@ -25,14 +24,16 @@ const AppointmentForm = () => {
   const [data, setdata] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [timeSlots, setTimeSlots] = useState([]);
   const [formData, setFormData] = useState({
     phone: "",
     clientName: "",
     email: "",
     pincode: "",
     date: "",
-    timeSlot: "",
+    time: "",
     gender: "",
+    services: [],
   });
 
   useEffect(() => {
@@ -97,6 +98,7 @@ const AppointmentForm = () => {
             clientName: clientData.name || "",
             email: clientData.email || "",
             pincode: clientData.pincode || "",
+            gender:clientData.gender || "",
           }));
         }
         setLoading(false);
@@ -114,38 +116,48 @@ const AppointmentForm = () => {
     return `${year}-${month}-${day}`;
   };
 
+  // timings slot api calling
+  useEffect(() => {
+    axios
+      .get("https://tryidol-salonapi.onrender.com/api/public/timings")
+      .then((response) => {
+        setTimeSlots(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+
   const generateTimeSlots = () => {
-    const timeSlots = [];
-    const start = 9;
-    const end = 20;
-
-    for (let hour = start; hour < end; hour++) {
-      const time1 = formatTime(hour, 0);
-      const time2 = formatTime(hour, 30);
-      timeSlots.push(time1, time2);
-    }
-
     return timeSlots.map((time, index) => (
       <option key={index} value={time}>
-        {time}
+        {formatTime(time)}
       </option>
     ));
   };
 
   const handleServiceChange = (selected) => {
-    setSelectedServices(selected);
+    const selectedServiceNames = selected.map((service) => service.value);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      services: selectedServiceNames,
+    }));
   };
 
-  const formatTime = (hour, minutes) => {
+  const formatTime = (timeString) => {
+    const [hour, minute] = timeString.split(":").map(Number);
     const suffix = hour >= 12 ? "PM" : "AM";
     const hour12 = hour % 12 || 12;
-    const minuteStr = minutes === 0 ? "00" : "30";
+    const minuteStr = minute === 0 ? "00" : String(minute).padStart(2, "0");
     return `${hour12}:${minuteStr} ${suffix}`;
   };
 
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    console.log("Navigating with formData:", formData);
+    navigate("/WorkerAppointment", { state: formData });
   };
 
   return (
@@ -203,7 +215,10 @@ const AppointmentForm = () => {
                 <FaCut className="appt-icon" />
                 <Select
                   options={servicesOptions}
-                  value={selectedServices}
+                  value={formData.services.map((service) => ({
+                    label: service,
+                    value: service,
+                  }))}
                   onChange={handleServiceChange}
                   labelledBy="Select"
                   isMulti={true}
@@ -237,16 +252,13 @@ const AppointmentForm = () => {
               <label htmlFor="gender">Gender</label>
               <div className="appt-input-container">
                 <FaVenusMars className="appt-icon" />
-                <select
+                <input
                   id="gender"
-                  value={formData.gender}
+                  placeholder="Gender"
+                  value={formData.gender == 'M' ? "Male" : formData.gender == 'F' ? "Female" : ""}
                   onChange={handleInputChange}
                 >
-                  <option value="">Select Gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
-                </select>
+                </input>
               </div>
             </div>
 
@@ -269,8 +281,8 @@ const AppointmentForm = () => {
               <div className="appt-input-container">
                 <FaClock className="appt-icon" />
                 <select
-                  id="timeSlot"
-                  value={formData.timeSlot}
+                  id="time"
+                  value={formData.time}
                   onChange={handleInputChange}
                 >
                   <option value="">Enter Time Slot</option>
@@ -279,25 +291,14 @@ const AppointmentForm = () => {
               </div>
             </div>
           </div>
-        </form>
-        <NavLink to="/WorkerAppointment" className="navlink">
           <button
             type="submit"
             className="appt-submit-button"
-
-            // onClick={postFetchData}
           >
             Select Worker
           </button>
-        </NavLink>
-        {/* {loading && <Loader />}
-        {error && <p>Error: {error.message}</p>}
-        {data && (
-          <div>
-            <h2>Response Data</h2>
-            <pre>{JSON.stringify(data, null, 2)}</pre>
-          </div>
-        )} */}
+        </form>
+        
       </div>
     </>
   );
