@@ -6,7 +6,7 @@ import week_sales from "./src/assets/sales2.png";
 const PanelData = [
     {
         id : "1",
-        heading: "Total Booking",
+        heading: "Today Booking",
         img : booking,
         panelinfo : 70,
     },
@@ -18,13 +18,13 @@ const PanelData = [
     },
     {
         id : "3",
-        heading: "Total Sales",
+        heading: "Total Customer",
         img : sales,
         panelinfo : 100,
     },
     {
         id : "4",
-        heading: "Week Sales",
+        heading: "New Customer",
         img : week_sales,
         panelinfo : 120,
     }

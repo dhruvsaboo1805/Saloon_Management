@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect , useState } from "react";
 import "../styles/Dashboard.css";
 import PanelData from "../../PanelData";
 import Cards from "../components/Cards";
@@ -7,6 +7,11 @@ import TotalAppointment from "../components/TotalAppointment";
 import CustomerInsight from "../components/CutomerInsight";
 import CustomerSatisfaction from "../components/CustomerSatisfaction";
 import RevenueChart from "../components/RevenueChart";
+import axios from "axios";
+// import booking from "./src/assets/booking.png";
+// import tot_booking from "./src/assets/booking2.png";
+// import sales from "./src/assets/sales.png";
+// import week_sales from "./src/assets/sales2.png";
 
 const appointmentData = {
   online: [30, 40, 40, 20, 60, 15, 80],
@@ -33,6 +38,44 @@ const satisfactionData = {
 };
 
 const Dashboard = () => {
+  // const [panelData, setPanelData] = useState([]);
+
+  // useEffect(() => {
+  //   const apiUrl = "https://tryidol-salonapi.onrender.com/api/pos/appointmentDashboard"
+  //   axios.get(apiUrl)
+  //   .then((response) => {
+  //      const data = response.data;
+  //       setPanelData([
+  //         {
+  //           id: "1",
+  //           heading: "Today Booking",
+  //           // img: booking,
+  //           panelinfo: data.todayBookings.length,
+  //         },
+  //         {
+  //           id: "2",
+  //           heading: "Week Booking",
+  //           img: require("../assets/booking2.png").default,
+  //           panelinfo: data.weekBookings.length,
+  //         },
+  //         {
+  //           id: "3",
+  //           heading: "Total Customer",
+  //           img: require("../assets/sales.png").default,
+  //           panelinfo: data.totalCustomers.length,
+  //         },
+  //         {
+  //           id: "4",
+  //           heading: "New Customer",
+  //           img: require("../assets/sales2.png").default,
+  //           panelinfo: data.newCustomers.length,
+  //         }
+  //       ]);
+  //     })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   })
+  // })
   return (
     <div className="dashboard-container">
       <div className="dashboard-heading">

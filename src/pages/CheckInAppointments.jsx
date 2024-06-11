@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTable } from "react-table";
 import "../styles/CheckInAppointments.css";
-import data from "../../CheckInAppointmentData"; // Adjust the import path as needed
+import PaymentPopUp from "../components/PaymentPopUp";
+import data from "../../CheckInAppointmentData";
 
 const CheckInAppointments = () => {
+  const [showPopup, setShowPopup] = useState(false);
+
   const columns = React.useMemo(
     () => [
       {
@@ -45,7 +48,7 @@ const CheckInAppointments = () => {
       {
         Header: "Payment",
         accessor: "payment",
-        Cell: () => <button className="checkin-appt-payment-btn">Pay</button>,
+        Cell: () => <button className="checkin-appt-payment-btn" onClick={() => setShowPopup(true)}>Pay</button>,
       },
     ],
     []
@@ -85,6 +88,14 @@ const CheckInAppointments = () => {
           })}
         </tbody>
       </table>
+      {showPopup && (
+        <PaymentPopUp
+          amount="850"
+          transactionId="185SDFWE774"
+          totalAmount="999"
+          onClose={() => setShowPopup(false)}
+        />
+      )}
     </div>
   );
 };

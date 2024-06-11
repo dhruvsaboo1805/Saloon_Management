@@ -2,8 +2,13 @@ import React from "react";
 import { useTable } from "react-table";
 import "../styles/ConfirmedAppointments.css";
 import data from "../../ConfirmedAppointmentsData";
+import { useState } from "react";
+import checkicon from "../assets/check-in-icon.png";
 
 const ConfirmedAppointments = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [currentData, setCurrentData] = useState({});
+  const [appointmentId, setAppointmentId] = useState("");
   const columns = React.useMemo(
     () => [
       {
@@ -12,7 +17,9 @@ const ConfirmedAppointments = () => {
         Cell: ({ value }) => (
           <div className="confirm-appt-service-list">
             {value.map((service, index) => (
-              <span key={index} className="confirm-appt-service-item">{service}</span>
+              <span key={index} className="confirm-appt-service-item">
+                {service}
+              </span>
             ))}
           </div>
         ),
@@ -40,11 +47,29 @@ const ConfirmedAppointments = () => {
       {
         Header: "Check in",
         accessor: "checkIn",
-        Cell: () => <button className="confirm-appt-checkin-btn">Check in</button>,
+        Cell: ({ row }) => (
+          <button
+            className="confirm-appt-checkin-btn"
+            onClick={() => handleCheckInClick(row.original)}
+          >
+            Check in
+          </button>
+        ),
       },
     ],
     []
   );
+
+  const handleCheckInClick = (row) => {
+    setCurrentData(row);
+    setAppointmentId("");
+    setShowModal(true);
+  };
+
+  const handleConfirm = () => {
+    console.log("Check In confirmed with Appointment ID:", appointmentId);
+    setShowModal(false);
+  };
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({
@@ -80,6 +105,52 @@ const ConfirmedAppointments = () => {
           })}
         </tbody>
       </table>
+
+      {/* popup modal for check in */}
+      {showModal && (
+        <div className="confirm-appointments-modal-overlay">
+          <div className="confirm-appointments-modal-content">
+            <div className="confirm-appointments-heading">
+              <img src={checkicon} alt="" />
+              <button
+                className="confirm-appointments-close-button"
+                onClick={() => setShowModal(false)}
+              >
+                ×
+              </button>
+            </div>
+            <h2>Check In</h2>
+            <form>
+              <div>
+                <label>Client Name</label>
+                <input type="text" value={currentData.clientName} readOnly />
+              </div>
+              <div>
+                <label>User Check In Appointment I.D</label>
+                <input
+                  type="text"
+                  value={appointmentId}
+                  onChange={(e) => setAppointmentId(e.target.value)}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={handleConfirm}
+                className="confirm-appointments-confirm-button"
+              >
+                Confirm
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowModal(false)}
+                className="confirm-appointments-cancel-button"
+              >
+                Cancel
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
