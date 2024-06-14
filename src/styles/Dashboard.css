@@ -6,11 +6,19 @@
 
 .dashboard-heading{
     font: bold;
-    font-size: 32px;
+    font-size: 28px;
     margin-left: 2rem;
+    margin-top: 2rem;
 }
 
 .dashboard-panel{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;   
+    flex-wrap: wrap;
+}
+
+.dashboard-cards-panel2{
     width: 100%;
     display: flex;
     justify-content: space-evenly;   

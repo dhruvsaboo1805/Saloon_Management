@@ -1,6 +1,7 @@
 import React, { useEffect , useState } from "react";
 import "../styles/Dashboard.css";
 import PanelData from "../../PanelData";
+import ApptDashCardsData from "../../ApptDashCardsData";
 import Cards from "../components/Cards";
 import TopService from "../components/TopService";
 import TotalAppointment from "../components/TotalAppointment";
@@ -8,10 +9,7 @@ import CustomerInsight from "../components/CutomerInsight";
 import CustomerSatisfaction from "../components/CustomerSatisfaction";
 import RevenueChart from "../components/RevenueChart";
 import axios from "axios";
-// import booking from "./src/assets/booking.png";
-// import tot_booking from "./src/assets/booking2.png";
-// import sales from "./src/assets/sales.png";
-// import week_sales from "./src/assets/sales2.png";
+import ApptDashCards from "../components/ApptDashCards";
 
 const appointmentData = {
   online: [30, 40, 40, 20, 60, 15, 80],
@@ -79,7 +77,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       <div className="dashboard-heading">
-        <h3>Dashboard</h3>
+        <h3>Appointment Dashboard</h3>
       </div>
       <div className="dashboard-panel">
         {PanelData.map((data) => (
@@ -91,21 +89,32 @@ const Dashboard = () => {
           ></Cards>
         ))}
       </div>
-
+      <div className="dashboard-cards-panel2">
+        {
+          ApptDashCardsData.map((data , index) => (
+            <ApptDashCards
+            key = {index}
+            status = {data.status}
+            count = {data.count}
+            color = {data.color}
+            ></ApptDashCards>
+          ))
+        }
+      </div>
       {/* Charts */}
       <div className="dashboard-chart-container">
+        {/* <TopService services={services} /> */}
+        <CustomerInsight data={insightData} />
         <TotalAppointment data={appointmentData} />
-        <TopService services={services} />
       </div>
 
       <div className="dashboard-chart-customer-container">
-        <CustomerInsight data={insightData} />
         {/* <CustomerSatisfaction data={satisfactionData} /> */}
       </div>
 
-      <div className="dashboard-chart-revenue-container">
-        <RevenueChart />
-      </div>
+      {/* <div className="dashboard-chart-revenue-container">
+        {/* <RevenueChart /> 
+      </div> */}
     </div>
   );
 };

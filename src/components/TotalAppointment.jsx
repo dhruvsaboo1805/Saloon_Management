@@ -31,6 +31,13 @@ const TotalAppointment = ({ data }) => {
       title: {
         display: true,
         text: 'Total Appointment',
+        font: {
+          size: 18,
+          margin: 20,
+          weight: 'bold',
+        },
+        color: '#333',
+        align: 'start',
       },
     },
     scales: {

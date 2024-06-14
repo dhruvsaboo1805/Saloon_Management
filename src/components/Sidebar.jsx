@@ -43,6 +43,24 @@ const Sidebar = () => {
             <MenuItem icon={<FaHome />} label="Dashboard" />
           </NavLink>
 
+          <NavLink
+            to="/calendar"
+            className={({ isActive }) =>
+              isActive ? "navlink active" : "navlink"
+            }
+          >
+            <MenuItem icon={<FaCalendar />} label="Calendar" />
+          </NavLink>
+
+          <NavLink
+            to="/allappointments"
+            className={({ isActive }) =>
+              isActive ? "navlink active" : "navlink"
+            }
+          >
+            <MenuItem icon={<FaCalendar />} label="All Appointments" />
+          </NavLink>
+
           {/* <NavLink
             to="/appointment"
             className={({ isActive }) => (isActive ? "navlink active" : "navlink")}
@@ -88,15 +106,8 @@ const Sidebar = () => {
               <MenuItem icon={<FaPhone />} label="Paid Appointments" />
             </NavLink>
           </div>
-          <NavLink
-            to="/calendar"
-            className={({ isActive }) =>
-              isActive ? "navlink active" : "navlink"
-            }
-          >
-            <MenuItem icon={<FaCalendar />} label="Calendar" />
-          </NavLink>
-          <MenuItem icon={<FaEnvelope />} label="Inbox" />
+
+          {/* <MenuItem icon={<FaEnvelope />} label="Inbox" />
           <MenuItem icon={<FaClipboardList />} label="Order Lists" />
           <NavLink
             to="/stockmanagement"
@@ -105,9 +116,18 @@ const Sidebar = () => {
             }
           >
             <MenuItem icon={<FaBoxOpen />} label="Product Stock" />
+          </NavLink> */}
+
+          <NavLink
+            to="/clientinfo"
+            className={({ isActive }) =>
+              isActive ? "navlink active" : "navlink"
+            }
+          >
+            <MenuItem icon={<FaCalendar />} label="Client Info" />
           </NavLink>
         </div>
-        <div className="sidebar-menu-section">
+        {/* <div className="sidebar-menu-section">
           <div className="sidebar-section-title">PAGES</div>
           <MenuItem icon={<FaTags />} label="Pricing" />
           <MenuItem icon={<FaCalendar />} label="Calendar" />
@@ -117,7 +137,7 @@ const Sidebar = () => {
           <MenuItem icon={<FaThLarge />} label="UI Elements" />
           <MenuItem icon={<FaUsers />} label="Team" />
           <MenuItem icon={<FaTable />} label="Table" />
-        </div>
+        </div> */}
         <div className="sidebar-menu-section">
           <MenuItem icon={<FaCog />} label="Settings" />
           <MenuItem icon={<FaSignOutAlt />} label="Logout" />

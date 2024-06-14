@@ -20,6 +20,8 @@ const WorkerAppointment = lazy(() => import("./pages/WorkerAppointment"));
 const WorkerSidePage = lazy(() => import("./pages/WorkerSidePage"));
 const WorkerStockPage = lazy(() => import("./pages/WorkerStockPage"));
 const Invoice = lazy(() => import("./pages/Invoice"));
+const AllAppointments = lazy(() => import("./pages/AllAppointments"));
+const ClientInfo = lazy(() => import("./pages/ClientInfo"));
 
 function App() {
   return (
@@ -48,6 +50,8 @@ function App() {
             <Route exact path="/Workerpage" element={<WorkerSidePage />}></Route>
             <Route exact path="/Workerpage/Workerstockpage" element={<WorkerStockPage />}></Route>
             <Route exact path="/invoice" element={<Invoice />}></Route>
+            <Route exact path="/allappointments" element={<AllAppointments />}></Route>
+            <Route exact path="/clientinfo" element={<ClientInfo />}></Route>
           </Routes>
         </Suspense>
       </div>

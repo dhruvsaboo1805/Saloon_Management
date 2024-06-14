@@ -1,0 +1,43 @@
+.client-info-container {
+    margin: 20px;
+    padding: 1rem 1rem;
+}
+
+.client-info-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 18px;
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.client-info-table th,
+.client-info-table td {
+  padding: 12px 15px;
+}
+
+.client-info-table thead tr {
+  background-color: #f2f2f2;
+  border-bottom: 1px solid #dddddd;
+}
+
+.client-info-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.client-info-table tbody tr:nth-of-type(even) {
+  background-color: #f9f9f9;
+}
+
+.client-info-button {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.client-info-button:hover {
+  background-color: #5a6268;
+}

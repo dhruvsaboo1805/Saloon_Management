@@ -1,7 +1,7 @@
 import booking from "./src/assets/booking.png";
-import tot_booking from "./src/assets/booking2.png";
-import sales from "./src/assets/sales.png";
-import week_sales from "./src/assets/sales2.png";
+import week_booking from "./src/assets/week_booking.png";
+import tot_cust from "./src/assets/tot_cust.png";
+import new_cust from "./src/assets/new_cust.png";
 
 const PanelData = [
     {
@@ -13,19 +13,19 @@ const PanelData = [
     {
         id : "2",
         heading: "Week Booking",
-        img : tot_booking,
+        img : week_booking,
         panelinfo : 90,
     },
     {
         id : "3",
         heading: "Total Customer",
-        img : sales,
+        img : tot_cust,
         panelinfo : 100,
     },
     {
         id : "4",
         heading: "New Customer",
-        img : week_sales,
+        img : new_cust,
         panelinfo : 120,
     }
 ]

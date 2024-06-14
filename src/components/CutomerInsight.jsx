@@ -19,7 +19,10 @@ const CustomerInsight = ({ data }) => {
 
   const options = {
     responsive: true,
+    cutout: '75%',
     cutoutPercentage: 70,
+    rotation: -90, 
+    circumference: 180, 
     plugins: {
       legend: {
         display: false,
