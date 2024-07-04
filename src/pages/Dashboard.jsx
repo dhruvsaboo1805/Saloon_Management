@@ -1,6 +1,6 @@
 import React, { useEffect , useState } from "react";
 import "../styles/Dashboard.css";
-import PanelData from "../../PanelData";
+import initialPanelData from "../../PanelData";
 import ApptDashCardsData from "../../ApptDashCardsData";
 import Cards from "../components/Cards";
 import TopService from "../components/TopService";
@@ -10,6 +10,10 @@ import CustomerSatisfaction from "../components/CustomerSatisfaction";
 import RevenueChart from "../components/RevenueChart";
 import axios from "axios";
 import ApptDashCards from "../components/ApptDashCards";
+import { useDispatch, useSelector } from 'react-redux';
+import { loadPanelData } from '../redux/actions/panelDataActions';
+import { loadInsightData } from '../redux/actions/insightActions';
+import { fetchApptDashCardsData } from '../redux/reducers/apptDashCardsSlice';
 
 const appointmentData = {
   online: [30, 40, 40, 20, 60, 15, 80],
@@ -23,11 +27,6 @@ const services = [
   { name: "Spa and Massage", sales: 25, color: "orange" },
 ];
 
-const insightData = {
-  newUser: 120,
-  oldUser: 200,
-  totalCount: 320,
-};
 
 const satisfactionData = {
   labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
@@ -35,52 +34,26 @@ const satisfactionData = {
   thisMonth: [4500, 4600, 4700, 4504],
 };
 
-const Dashboard = () => {
-  // const [panelData, setPanelData] = useState([]);
 
-  // useEffect(() => {
-  //   const apiUrl = "https://tryidol-salonapi.onrender.com/api/pos/appointmentDashboard"
-  //   axios.get(apiUrl)
-  //   .then((response) => {
-  //      const data = response.data;
-  //       setPanelData([
-  //         {
-  //           id: "1",
-  //           heading: "Today Booking",
-  //           // img: booking,
-  //           panelinfo: data.todayBookings.length,
-  //         },
-  //         {
-  //           id: "2",
-  //           heading: "Week Booking",
-  //           img: require("../assets/booking2.png").default,
-  //           panelinfo: data.weekBookings.length,
-  //         },
-  //         {
-  //           id: "3",
-  //           heading: "Total Customer",
-  //           img: require("../assets/sales.png").default,
-  //           panelinfo: data.totalCustomers.length,
-  //         },
-  //         {
-  //           id: "4",
-  //           heading: "New Customer",
-  //           img: require("../assets/sales2.png").default,
-  //           panelinfo: data.newCustomers.length,
-  //         }
-  //       ]);
-  //     })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   })
-  // })
+const Dashboard = () => {
+  const dispatch = useDispatch();
+  const panelData = useSelector((state) => state.panelData);
+  const insightData = useSelector((state) => state.insight);
+  const apptDashCardsData = useSelector((state) => state.apptDashCards);
+
+  useEffect(() => {
+    dispatch(loadPanelData());
+    dispatch(loadInsightData());
+    dispatch(fetchApptDashCardsData());
+  }, [dispatch]);
+
   return (
     <div className="dashboard-container">
       <div className="dashboard-heading">
         <h3>Appointment Dashboard</h3>
       </div>
       <div className="dashboard-panel">
-        {PanelData.map((data) => (
+        {panelData.map((data) => (
           <Cards
             key={data.id}
             heading={data.heading}
@@ -91,7 +64,7 @@ const Dashboard = () => {
       </div>
       <div className="dashboard-cards-panel2">
         {
-          ApptDashCardsData.map((data , index) => (
+          apptDashCardsData.map((data , index) => (
             <ApptDashCards
             key = {index}
             status = {data.status}

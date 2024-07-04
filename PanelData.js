@@ -8,25 +8,25 @@ const PanelData = [
         id : "1",
         heading: "Today Booking",
         img : booking,
-        panelinfo : 70,
+        panelinfo : 0,
     },
     {
         id : "2",
         heading: "Week Booking",
         img : week_booking,
-        panelinfo : 90,
+        panelinfo : 0,
     },
     {
         id : "3",
         heading: "Total Customer",
         img : tot_cust,
-        panelinfo : 100,
+        panelinfo : 0,
     },
     {
         id : "4",
         heading: "New Customer",
         img : new_cust,
-        panelinfo : 120,
+        panelinfo : 0,
     }
 ]
 
