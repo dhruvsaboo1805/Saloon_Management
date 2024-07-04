@@ -5,6 +5,7 @@ import data from "../../PendingAppointmentsData";
 import { IoIosArrowDown } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 
+const apiUrl = import.meta.env.VITE_API_PENDING_APPOINTMENTS;
 const PendingAppointment = () => {
   const columns = React.useMemo(
     () => [
