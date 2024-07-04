@@ -51,7 +51,7 @@
   font-weight: bold;
 }
 
-.pending-appt-assign-btn, .pending-appt-cancel-btn {
+.pending-appt-assign-select, .pending-appt-cancel-btn {
   background-color: #FCBE2D;
   color: #fff;
   border: none;
