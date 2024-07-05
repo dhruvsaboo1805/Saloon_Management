@@ -37,9 +37,9 @@ const PendingAppointment = () => {
                 convertTo12HourFormat(appointment.time) || ""
               }`,
               workerName: appointment.prefEmployee || "",
-              duration: appointment.duration
-              ? convertToHoursAndMinutes(appointment.duration)
-              : "",
+             duration: appointment.duration
+                ? convertToHoursAndMinutes(appointment.duration)
+                : "",
               assignEmployee: appointment.available_employees || "",
               cancel: "Cancel",
             };

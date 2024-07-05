@@ -26,6 +26,7 @@ const AllAppointments = () => {
               return null;
             }
             return {
+              ...appointment,
               serviceName: appointment.services || [],
               clientName: appointment.name || "",
               contact: appointment.phone || "",
@@ -41,7 +42,7 @@ const AllAppointments = () => {
             appointment.contact &&
             appointment.dateTime.trim() !== '-' &&
             appointment.workerassigned
-          ); // Filter out any null entries and empty/default fields
+          ); 
 
         setAllAppointments(formattedAppointments);
       } catch (error) {

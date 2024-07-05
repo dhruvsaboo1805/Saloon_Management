@@ -6,12 +6,13 @@ import PaymentPopUp from "../components/PaymentPopUp";
 import Loader from "../components/Loader";
 
 const apiUrl = import.meta.env.VITE_API_CHECKED_IN_APPOINTMENTS;
-const employee_name = import.meta.env.VITE_API_PENDING_APPOINTMENTS_EMPLOYEES;
+const employeeNameUrl = import.meta.env.VITE_API_PENDING_APPOINTMENTS_EMPLOYEES;
 
 const CheckInAppointments = () => {
   const [checkedInAppointments, setCheckedInAppointments] = useState([]);
-  const [EmployeeName, setEmployeeName] = useState({});
+  const [employeeName, setEmployeeName] = useState({});
   const [showPopup, setShowPopup] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,6 +31,7 @@ const CheckInAppointments = () => {
               return null;
             }
             return {
+              ...appointment,
               serviceName: appointment.services || [],
               clientName: appointment.name || "",
               contact: appointment.phone || "",
@@ -56,9 +58,10 @@ const CheckInAppointments = () => {
         console.error("API fetching error", error);
       }
     };
+
     const fetchEmployeeNames = async () => {
       try {
-        const response = await axios.get(employee_name);
+        const response = await axios.get(employeeNameUrl);
         setEmployeeName(response.data);
       } catch (error) {
         console.error("employee_name fetching error", error);
@@ -98,6 +101,11 @@ const CheckInAppointments = () => {
     return result.trim(); // Remove any trailing whitespace
   };
 
+  const handlePaymentClick = (appointment) => {
+    setSelectedAppointment(appointment);
+    setShowPopup(true);
+  };
+
   const columns = React.useMemo(
     () => [
       {
@@ -128,7 +136,7 @@ const CheckInAppointments = () => {
       {
         Header: "Assigned Worker",
         accessor: "workerAssigned",
-        Cell: ({ value }) => <span>{EmployeeName[value]}</span>,
+        Cell: ({ value }) => <span>{employeeName[value]}</span>,
       },
       {
         Header: "Duration",
@@ -137,17 +145,17 @@ const CheckInAppointments = () => {
       {
         Header: "Payment",
         accessor: "payment",
-        Cell: ({ value }) => (
+        Cell: ({ row }) => (
           <button
             className="checkin-appt-payment-btn"
-            onClick={() => setShowPopup(true)}
+            onClick={() => handlePaymentClick(row.original)}
           >
-            Pay ₹{value}
+            Pay ₹{row.original.payment}
           </button>
         ),
       },
     ],
-    []
+    [employeeName]
   );
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
@@ -188,11 +196,11 @@ const CheckInAppointments = () => {
           })}
         </tbody>
       </table>
-      {showPopup && (
+      {showPopup && selectedAppointment && (
         <PaymentPopUp
-          amount="850"
-          transactionId="185SDFWE774"
-          totalAmount="999"
+          amount={selectedAppointment.payment}
+          transactionId={selectedAppointment.txnIds[0] || "185SDFWE774"}
+          totalAmount={selectedAppointment.totalBill}
           onClose={() => setShowPopup(false)}
         />
       )}
