@@ -6,11 +6,15 @@ import "../styles/CustomerInsight.css";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const CustomerInsight = ({ data }) => {
+  console.log("data -> ", data);
+  const new_User = data.new_clients.length;
+  const old_User = data.total_clients.length - new_User;
+
   const chartData = {
     labels: ['New User', 'Old User'],
     datasets: [
       {
-        data: [data.newUser, data.oldUser],
+        data: [new_User, old_User],
         backgroundColor: ['#A259FF', '#ECECEC'],
         hoverBackgroundColor: ['#A259FF', '#ECECEC'],
       },
@@ -20,9 +24,8 @@ const CustomerInsight = ({ data }) => {
   const options = {
     responsive: true,
     cutout: '75%',
-    cutoutPercentage: 70,
-    rotation: -90, 
-    circumference: 180, 
+    rotation: -90,
+    circumference: 180,
     plugins: {
       legend: {
         display: false,
@@ -41,14 +44,14 @@ const CustomerInsight = ({ data }) => {
       <Doughnut data={chartData} options={options} />
       <div className="insight-total">
         <p>Total Count</p>
-        <h2>{data.totalCount}</h2>
+        <h2>{data.total_clients.length}</h2>
       </div>
       <div className="insight-legend">
         <span className="legend-item">
-          <span className="dot new-user"></span> New user {data.newUser}
+          <span className="dot new-user"></span> New user {new_User}
         </span>
         <span className="legend-item">
-          <span className="dot old-user"></span> Old User {data.oldUser}
+          <span className="dot old-user"></span> Old User {old_User}
         </span>
       </div>
     </div>

@@ -4,6 +4,7 @@ import "../styles/PendingAppointment.css";
 import { IoIosArrowDown } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
+import Loader from "../components/Loader";
 
 const apiUrl = import.meta.env.VITE_API_PENDING_APPOINTMENTS;
 const employee_name = import.meta.env.VITE_API_PENDING_APPOINTMENTS_EMPLOYEES;
@@ -11,53 +12,93 @@ const employee_name = import.meta.env.VITE_API_PENDING_APPOINTMENTS_EMPLOYEES;
 const PendingAppointment = () => {
   const [appointments, setAppointments] = useState([]);
   const [employeeName, setEmployeeName] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get(apiUrl)
-      .then((response) => {
+    const fetchAppointments = async () => {
+      try {
+        const response = await axios.get(apiUrl);
         const data = response.data;
-        const [key, appointment] = Object.entries(data).find(
-          ([key]) => key !== "success"
-        );
-        const formattedAppointments = [
-          {
-            serviceName: appointment.services,
-            clientName: appointment.name,
-            contact: appointment.phone,
-            dateTime: `${appointment.date} - ${appointment.time}`,
-            workerName: appointment.prefEmployee,
-            duration: `${appointment.duration} min`,
-            assignEmployee: appointment.available_employees,
-            cancel: "Cancel",
-          },
-        ];
+
+        const formattedAppointments = Object.entries(data)
+          .filter(([key]) => key !== "success")
+          .map(([key, appointment]) => {
+            if (!appointment) {
+              console.warn(
+                `Appointment data for key ${key} is undefined or null`
+              );
+              return null;
+            }
+            return {
+              serviceName: appointment.services || [],
+              clientName: appointment.name || "",
+              contact: appointment.phone || "",
+              dateTime: `${appointment.date || ""} - ${
+                convertTo12HourFormat(appointment.time) || ""
+              }`,
+              workerName: appointment.prefEmployee || "",
+              duration: appointment.duration
+              ? convertToHoursAndMinutes(appointment.duration)
+              : "",
+              assignEmployee: appointment.available_employees || "",
+              cancel: "Cancel",
+            };
+          })
+          .filter(appointment => 
+            appointment !== null &&
+            appointment.clientName &&
+            appointment.contact &&
+            appointment.dateTime.trim() !== '-' &&
+            appointment.workerName
+          ); // Filter out any null entries and empty/default fields
+
         setAppointments(formattedAppointments);
-      })
-      .catch((error) => {
-        console.log("API fetching error");
-        console.error(error);
-      });
-  }, []);
+      } catch (error) {
+        console.error("API fetching error", error);
+      }
+    };
 
-  useEffect(() => {
-    axios
-      .get(employee_name)
-      .then((response) => {
+    const fetchEmployeeNames = async () => {
+      try {
+        const response = await axios.get(employee_name);
         setEmployeeName(response.data);
-      })
-      .catch((error) => {
-        console.log("employee_name fetching error");
-        console.error(error);
-      });
+      } catch (error) {
+        console.error("employee_name fetching error", error);
+      }
+    };
+
+    const fetchData = async () => {
+      await Promise.all([fetchAppointments(), fetchEmployeeNames()]);
+      setLoading(false);
+    };
+
+    fetchData();
   }, []);
 
-  // const handleAssignChange = (e, appointment) => {
-  //   const selectedEmployee = e.target.value;
-  //   // console.log(
-  //   //   `Assigned employee ${selectedEmployee} to appointment ${appointment.clientName}`
-  //   // );
-  // };
+  const convertTo12HourFormat = (time) => {
+    if (!time) return "";
+    const [hour, minute] = time.split(":");
+    const hourInt = parseInt(hour, 10);
+    const minuteInt = parseInt(minute, 10);
+    const ampm = hourInt >= 12 ? "PM" : "AM";
+    const adjustedHour = hourInt % 12 || 12;
+    return `${adjustedHour}:${
+      minuteInt < 10 ? `0${minuteInt}` : minuteInt
+    } ${ampm}`;
+  };
+  
+  const convertToHoursAndMinutes = (minutes) => {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    let result = "";
+    if (hours > 0) {
+      result += `${hours}h `;
+    }
+    if (remainingMinutes > 0) {
+      result += `${remainingMinutes}m`;
+    }
+    return result.trim(); // Remove any trailing whitespace
+  };
 
   const columns = React.useMemo(
     () => [
@@ -99,11 +140,8 @@ const PendingAppointment = () => {
         Header: "Assign Employee",
         accessor: "assignEmployee",
         Cell: ({ value, row }) => (
-          <select
-            className="pending-appt-assign-select"
-            // onChange={(e) => handleAssignChange(e, row.original)}
-          >
-            <option value = "">Assign</option>
+          <select className="pending-appt-assign-select">
+            <option value="">Assign</option>
             {Array.isArray(value)
               ? value.map((employee, index) => (
                   <option key={index} value={employee}>
@@ -128,6 +166,10 @@ const PendingAppointment = () => {
       columns,
       data: appointments,
     });
+
+  if (loading) {
+    return <Loader />; // Display the loader while fetching data
+  }
 
   return (
     <div className="pending-appointments-container">

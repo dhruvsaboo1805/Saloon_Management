@@ -1,14 +1,114 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useTable } from "react-table";
 import "../styles/ConfirmedAppointments.css";
-import data from "../../ConfirmedAppointmentsData";
-import { useState } from "react";
+import axios from "axios";
+import Loader from "../components/Loader";
 import checkicon from "../assets/check-in-icon.png";
 
+const apiUrl = import.meta.env.VITE_API_CONFIRMED_APPOINTMENTS;
+const employee_name = import.meta.env.VITE_API_PENDING_APPOINTMENTS_EMPLOYEES;
+
 const ConfirmedAppointments = () => {
+  const [appointments, setAppointments] = useState([]);
+  const [employeeName, setEmployeeName] = useState({});
+  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [currentData, setCurrentData] = useState({});
   const [appointmentId, setAppointmentId] = useState("");
+
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const response = await axios.get(apiUrl);
+        const data = response.data;
+        console.log("Data from API:", data);
+
+        const formattedAppointments = Object.entries(data)
+          .filter(([key]) => key !== "success")
+          .map(([key, appointment]) => {
+            if (!appointment) {
+              console.log(
+                `Appointment data for key ${key} is undefined or null`
+              );
+              return null;
+            }
+            const formattedAppointment = {
+              serviceName: appointment.services || [],
+              clientName: appointment.name || "",
+              contact: appointment.phone || "",
+              dateTime: `${appointment.date || ""} - ${
+                convertTo12HourFormat(appointment.time) || ""
+              }`,
+              workerAssigned: appointment.assignedEmployee || "",
+              duration: appointment.duration
+                ? convertToHoursAndMinutes(appointment.duration)
+                : "",
+              checkIn: "Check in",
+            };
+            console.log("Formatted appointment data:", formattedAppointment);
+            return formattedAppointment;
+          })
+          .filter(
+            (appointment) =>
+              appointment !== null &&
+              appointment.clientName &&
+              appointment.contact &&
+              appointment.dateTime.trim() !== "-" &&
+              appointment.workerAssigned
+          );
+
+        console.log(
+          "Filtered and formatted appointments:",
+          formattedAppointments
+        );
+        setAppointments(formattedAppointments);
+      } catch (error) {
+        console.error("API fetching error", error);
+      }
+    };
+
+    const fetchEmployeeNames = async () => {
+      try {
+        const response = await axios.get(employee_name);
+        setEmployeeName(response.data);
+      } catch (error) {
+        console.error("Employee names fetching error", error);
+      }
+    };
+
+    const fetchData = async () => {
+      await Promise.all([fetchAppointments(), fetchEmployeeNames()]);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
+  const convertTo12HourFormat = (time) => {
+    if (!time) return "";
+    const [hour, minute] = time.split(":");
+    const hourInt = parseInt(hour, 10);
+    const minuteInt = parseInt(minute, 10);
+    const ampm = hourInt >= 12 ? "PM" : "AM";
+    const adjustedHour = hourInt % 12 || 12;
+    return `${adjustedHour}:${
+      minuteInt < 10 ? `0${minuteInt}` : minuteInt
+    } ${ampm}`;
+  };
+  
+  const convertToHoursAndMinutes = (minutes) => {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    let result = "";
+    if (hours > 0) {
+      result += `${hours}h `;
+    }
+    if (remainingMinutes > 0) {
+      result += `${remainingMinutes}m`;
+    }
+    return result.trim(); // Remove any trailing whitespace
+  };
+
   const columns = React.useMemo(
     () => [
       {
@@ -39,6 +139,7 @@ const ConfirmedAppointments = () => {
       {
         Header: "Worker Assigned",
         accessor: "workerAssigned",
+        Cell: ({ value }) => <span>{employeeName[value]}</span>,
       },
       {
         Header: "Duration",
@@ -57,7 +158,7 @@ const ConfirmedAppointments = () => {
         ),
       },
     ],
-    []
+    [employeeName]
   );
 
   const handleCheckInClick = (row) => {
@@ -74,8 +175,12 @@ const ConfirmedAppointments = () => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({
       columns,
-      data,
+      data: appointments,
     });
+
+  if (loading) {
+    return <Loader />; // Display the loader while fetching data
+  }
 
   return (
     <div className="confirm-appointments-container">
