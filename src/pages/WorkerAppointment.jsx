@@ -1,26 +1,24 @@
 import React, { useEffect, useState } from "react";
 import "../styles/WorkerAppointment.css";
 import EmployeeCard from "../components/EmployeeCard";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import Loader from "../components/Loader";
 
+const available_employees_url = import.meta.env.VITE_API_WORKER_APPOINTMENT_AVAILBLE_EMPLOYEES;
+const employees_url = import.meta.env.VITE_API_PENDING_APPOINTMENTS_EMPLOYEES;
+const create_appointment_url = import.meta.env.VITE_API_CREATE_APPOINTMENT;
+
 const WorkerAppointment = () => {
-  const location = useLocation();
-  const formData = location.state || {};
+  const { state } = useLocation();
+  const { formData } = state || {};
   const [availableEmployeeIds, setAvailableEmployeeIds] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!formData.date || !formData.time) {
-      console.error("Form data is missing date or time:", formData);
-      navigate("/AppointmentForm");
-      return;
-    }
-  })
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
     const day = String(date.getDate()).padStart(2, "0");
@@ -30,7 +28,6 @@ const WorkerAppointment = () => {
   };
 
   const convertToMilitaryTime = (time) => {
-    console.log(time); // Debugging line
     const [timePart, modifier] = time.split(" ");
     let [hours, minutes] = timePart.split(":");
 
@@ -45,72 +42,78 @@ const WorkerAppointment = () => {
     return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`;
   };
 
+  // console.log(formData);
   useEffect(() => {
-    const fetchAvailableEmployees = async () => {
-      try {
-        const formattedDate = formatDate(formData.date);
-        const militaryTimeSlot = convertToMilitaryTime(formData.time);
+    if (formData) {
+      const fetchAvailableEmployees = async () => {
+        try {
+          const formattedDate = formatDate(formData.date);
+          // console.log(formattedDate);
+          const militaryTimeSlot = convertToMilitaryTime(formData.time);
 
-        const response = await axios.post(
-          "https://tryidol-salonapi.onrender.com/api/public/availableEmployees",
-          { ...formData, date: formattedDate, time: militaryTimeSlot }
-        );
+          const response = await axios.post(
+            available_employees_url,
+            { ...formData, date: formattedDate, time: militaryTimeSlot }
+          );
 
-        const matchingEmployeeIds = response.data;
-        console.log("Matching Employee IDs:", matchingEmployeeIds);
-        setAvailableEmployeeIds(matchingEmployeeIds);
-      } catch (error) {
-        console.error("Error fetching available employees:", error);
-        setError(error);
-        setLoading(false);
-      }
-    };
+          const matchingEmployeeIds = response.data;
+          // console.log("Matching Employee IDs:", matchingEmployeeIds);
+          setAvailableEmployeeIds(matchingEmployeeIds);
 
-    fetchAvailableEmployees();
-  }, [formData]);
+          // Fetch employee details based on IDs
+          const employeeIdsQuery = matchingEmployeeIds.join(",");
+          console.log("employeeIdsQuery ", employeeIdsQuery);
+          const employeeResponse = await axios.get(`${employees_url}?ids=${employeeIdsQuery}`);
+          const employeeData = employeeResponse.data;
+          console.log("employeeData ", employeeData);
 
-  useEffect(() => {
-    const fetchEmployeeDetails = async () => {
-      try {
-        console.log("tye ke andra");
-        alert(typeof availableEmployeeIds);
-        alert(availableEmployeeIds.length);
-        if (availableEmployeeIds.length > 0) {
-          const queryString = availableEmployeeIds
-            .map((id) => `employeeIds=${id}`)
-            .join("&");
-          // const response = await axios.get(
-          //   `https://tryidol-salonapi.onrender.com/api/public/basicEmployees?${queryString}`
-          // );
-
-          const response = {1:"Aryan" , 2:"Dhruv", 3:"Chirag"};
-
-          const employeeDetails = response;
-          console.log("Employee Details:", employeeDetails);
-
-          const employeesArray = availableEmployeeIds.map((id) => ({
-            id,
-            name: employeeDetails[id],
-          }));
-
-          console.log(employeesArray);
-
-          setEmployees(employeesArray);
-         
+          const employeeDetails = matchingEmployeeIds.map((id) => ({ id, name: employeeData[id] }));
+          console.log("employeeDetails ", employeeDetails);
+          setEmployees(employeeDetails);
           setLoading(false);
-        } else {
-          console.log("else ke andar");
+        } catch (error) {
+          console.error("Error fetching available employees:", error);
+          setError(error);
           setLoading(false);
         }
-      } catch (error) {
-        console.error("Error fetching employees:", error);
-        setError(error);
-        setLoading(false);
-      }
-    };
+      };
 
-    fetchEmployeeDetails();
-  }, [availableEmployeeIds]);
+      fetchAvailableEmployees();
+    }
+  }, [formData]);
+
+  const handleEmployeeSelect = (employeeId) => {
+    setSelectedEmployeeId(employeeId);
+  };
+
+  const handleCreateAppointment = async () => {
+    if (selectedEmployeeId && formData) {
+      try {
+        // Reverse the date format
+        const formattedDate = reverseDateFormat(formData.date);
+        console.log(formattedDate);
+        
+        // Prepare appointment data including the reversed date
+        const appointmentData = { ...formData, prefEmployee: selectedEmployeeId, date: formattedDate };
+        
+        // Send POST request to create appointment
+        await axios.post(create_appointment_url, appointmentData);
+        
+        // Navigate to the confirmed appointments page
+        navigate("/ConfirmedAppointments");
+      } catch (error) {
+        console.error("Error creating appointment:", error);
+        setError(error);
+      }
+    }
+  };
+  
+  // Function to reverse the date format (assuming input is in "dd-mm-yyyy" format)
+  const reverseDateFormat = (dateStr) => {
+    const [day, month, year] = dateStr.split("-");
+    return `${year}-${month}-${day}`;
+  };
+  
 
   if (loading) {
     return <Loader />;
@@ -120,30 +123,26 @@ const WorkerAppointment = () => {
     return <div>Error: {error.message}</div>;
   }
 
-  console.log(employees);
-  alert(typeof employees);
-  alert("upar wala length employee ka hain");
-  if (Object.keys(employees).length === 0) {
-    navigate("/AppointmentForm");
-    return null; 
-  }
-
-  useEffect(() => {
-    console.log("lqst useeffect ke andar");
-    console.log(employees);
-  } , [])
   return (
     <div>
       <div className="worker-appt-container">
         <h1>Workers Available</h1>
         <div className="worker-appt-list">
           {employees.map((employee) => (
-            <EmployeeCard key={employee.id} employee={employee} />
+            <EmployeeCard
+              key={employee.id}
+              employee={employee}
+              onSelect={handleEmployeeSelect}
+            />
           ))}
         </div>
       </div>
       <div className="worker-appt-button-div">
-        <button  className="worker-create-appointment">
+        <button
+          className="worker-create-appointment"
+          onClick={handleCreateAppointment}
+          disabled={!selectedEmployeeId}
+        >
           Create Appointment
         </button>
       </div>

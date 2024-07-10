@@ -8,6 +8,7 @@ import Loader from "../components/Loader";
 
 const apiUrl = import.meta.env.VITE_API_PENDING_APPOINTMENTS;
 const employee_name = import.meta.env.VITE_API_PENDING_APPOINTMENTS_EMPLOYEES;
+const delete_appt_url = import.meta.env.VITE_API_DELETE_APPOINTMENT;
 
 const PendingAppointment = () => {
   const [appointments, setAppointments] = useState([]);

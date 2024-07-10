@@ -3,31 +3,25 @@ import "../styles/AppointmentForm.css";
 import { useState, useEffect } from "react";
 import Select from "react-select";
 import axios from "axios";
+import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaClock, FaCut, FaVenusMars } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import {
-  FaUser,
-  FaEnvelope,
-  FaPhone,
-  FaMapMarkerAlt,
-  FaCalendarAlt,
-  FaClock,
-  FaCut,
-  FaVenusMars,
-} from "react-icons/fa";
-import { NavLink } from "react-router-dom";
+
+const services_data_url = import.meta.env.VITE_API_APPOINTMENT_FORM_SERVICES;
+const phone_number_to_data = import.meta.env.VITE_API_APPOINTMENT_FORM_PGONE_NUMBER_TO_CLIENT_DATA;
+const timings_url = import.meta.env.VITE_API_APPOINTMENT_FORM_TIMINGS;
 
 const AppointmentForm = () => {
   const [minDate, setMinDate] = useState("");
   const [maxDate, setMaxDate] = useState("");
   const [selectedServices, setSelectedServices] = useState([]);
   const [servicesOptions, setServicesOptions] = useState([]);
-  const [data, setdata] = useState(null);
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [timeSlots, setTimeSlots] = useState([]);
   const [formData, setFormData] = useState({
     phone: "",
-    clientName: "",
+    name: "",
     email: "",
     pincode: "",
     date: "",
@@ -35,6 +29,7 @@ const AppointmentForm = () => {
     gender: "",
     services: [],
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const today = new Date();
@@ -45,14 +40,11 @@ const AppointmentForm = () => {
     setMaxDate(formatDate(maxDate));
   }, []);
 
-  // item list api cal;
   useEffect(() => {
-    const apiUrl = "https://tryidol-salonapi.onrender.com/api/public/items";
     setLoading(true);
     axios
-      .get(apiUrl)
+      .get(services_data_url)
       .then((response) => {
-        console.log(response);
         if (response.data && typeof response.data.services === "object") {
           const servicesArray = Object.values(response.data.services);
           const services = servicesArray.map((service) => ({
@@ -78,16 +70,15 @@ const AppointmentForm = () => {
       [id]: value,
     }));
 
-    if (id === "phone" && value.length == 10) {
+    if (id === "phone" && value.length === 10) {
       fetchClientData(value);
     }
   };
 
-  // phone number autofill data api
   const fetchClientData = (phone) => {
     setLoading(true);
     axios
-      .post("https://tryidol-salonapi.onrender.com/api/pos/getClient", {
+      .post(phone_number_to_data, {
         phone,
       })
       .then((response) => {
@@ -95,10 +86,10 @@ const AppointmentForm = () => {
           const clientData = response.data;
           setFormData((prevFormData) => ({
             ...prevFormData,
-            clientName: clientData.name || "",
+            name: clientData.name || "",
             email: clientData.email || "",
             pincode: clientData.pincode || "",
-            gender:clientData.gender || "",
+            gender: clientData.gender || "",
           }));
         }
         setLoading(false);
@@ -116,10 +107,9 @@ const AppointmentForm = () => {
     return `${year}-${month}-${day}`;
   };
 
-  // timings slot api calling
   useEffect(() => {
     axios
-      .get("https://tryidol-salonapi.onrender.com/api/public/timings")
+      .get(timings_url)
       .then((response) => {
         setTimeSlots(response.data);
       })
@@ -127,7 +117,6 @@ const AppointmentForm = () => {
         console.log(err);
       });
   }, []);
-
 
   const generateTimeSlots = () => {
     return timeSlots.map((time, index) => (
@@ -153,21 +142,19 @@ const AppointmentForm = () => {
     return `${hour12}:${minuteStr} ${suffix}`;
   };
 
-  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Navigating with formData:", formData);
-    navigate("/WorkerAppointment", { state: formData });
+    navigate("/WorkerAppointment", { state: { formData } });
   };
 
   return (
     <>
       <h2 className="appt-form-heading">New Appointments</h2>
       <div className="appt-form-container">
-        <form className="appt-form-formcontainer" onSubmit={handleSubmit}>
+        <form className="appt-form-form_container" onSubmit={handleSubmit}>
           <div className="appt-form-left">
             <div className="appt-form-group">
-              <label htmlFor="phoneNo">Phone No</label>
+              <label htmlFor="phone">Phone No</label>
               <div className="appt-input-container">
                 <FaPhone className="appt-icon" />
                 <input
@@ -181,14 +168,14 @@ const AppointmentForm = () => {
             </div>
 
             <div className="appt-form-group">
-              <label htmlFor="clientName">Client Name</label>
+              <label htmlFor="name">Client Name</label>
               <div className="appt-input-container">
                 <FaUser className="appt-icon" />
                 <input
                   type="text"
-                  id="clientName"
+                  id="name"
                   placeholder="Enter Client name"
-                  value={formData.clientName}
+                  value={formData.name}
                   onChange={handleInputChange}
                 />
               </div>
@@ -255,10 +242,9 @@ const AppointmentForm = () => {
                 <input
                   id="gender"
                   placeholder="Gender"
-                  value={formData.gender == 'M' ? "Male" : formData.gender == 'F' ? "Female" : ""}
+                  value={formData.gender === "M" ? "Male" : formData.gender === "F" ? "Female" : ""}
                   onChange={handleInputChange}
-                >
-                </input>
+                />
               </div>
             </div>
 
@@ -277,7 +263,7 @@ const AppointmentForm = () => {
             </div>
 
             <div className="appt-form-group">
-              <label htmlFor="timeSlot">Time Slot</label>
+              <label htmlFor="time">Time Slot</label>
               <div className="appt-input-container">
                 <FaClock className="appt-icon" />
                 <select
@@ -291,14 +277,10 @@ const AppointmentForm = () => {
               </div>
             </div>
           </div>
-          <button
-            type="submit"
-            className="appt-submit-button"
-          >
-            Select Worker
+          <button type="submit" className="appt-submit-button">
+            Get Worker
           </button>
         </form>
-        
       </div>
     </>
   );

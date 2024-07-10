@@ -1,25 +1,12 @@
-import React, { useEffect } from 'react'
+import React from "react";
 import "../styles/EmployeeCard.css";
 
-const EmployeeCard = ({ employee }) => {
-  useEffect(() => {
-    console.log(employee);
-    console.log("emplyee card comp");
-  } , []);
-
+const EmployeeCard = ({ employee, onSelect }) => {
   return (
-    <div>
-      <div className="worker-card">
-        <img
-          // src={employee.image}
-          alt={employee.name}
-          className="worker-image"
-        />
-        <h3>{employee.name}</h3>
-        {/* <p>{employee.role}</p> */}
-      </div>
+    <div className="employee-card" onClick={() => onSelect(employee.id)}>
+      <h2>{employee.name}</h2>
     </div>
-  )
-}
+  );
+};
 
-export default EmployeeCard
+export default EmployeeCard;

@@ -61,7 +61,8 @@ const ConfirmedAppointments = () => {
           "Filtered and formatted appointments:",
           formattedAppointments
         );
-        setAppointments(formattedAppointments);
+         // Reverse the array to display newest entries first
+         setAppointments(formattedAppointments.reverse());
       } catch (error) {
         console.error("API fetching error", error);
       }

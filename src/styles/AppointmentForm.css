@@ -12,9 +12,10 @@
     margin-left: 1.5rem;
 }
 
-.appt-form-formcontainer {
+.appt-form-form_container {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 .appt-form-container h2 {
   margin-bottom: 20px;
@@ -72,7 +73,6 @@
 }
 
 .appt-submit-button {
-  margin-top: 1.5rem;
   width: 50%;
   padding: 10px;
   background-color: #4880ff;
@@ -81,6 +81,8 @@
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
+  margin: 0 auto;
+  margin-top: .8rem;
 }
 
 .appt-submit-button:hover {
@@ -93,7 +95,7 @@
 
 
 @media screen and (max-width:900px){
-  .appt-form-formcontainer {
+  .appt-form-form_container {
     flex-direction: column;
   }
 }
