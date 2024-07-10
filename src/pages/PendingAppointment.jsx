@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useTable } from "react-table";
 import "../styles/PendingAppointment.css";
-import { IoIosArrowDown } from "react-icons/io";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Loader from "../components/Loader";
 
 const apiUrl = import.meta.env.VITE_API_PENDING_APPOINTMENTS;
 const employee_name = import.meta.env.VITE_API_PENDING_APPOINTMENTS_EMPLOYEES;
 const delete_appt_url = import.meta.env.VITE_API_DELETE_APPOINTMENT;
+const assign_employee_url = import.meta.env.VITE_API_ASSIGN_CONFIRM_APPOINTMENT;
 
 const PendingAppointment = () => {
   const [appointments, setAppointments] = useState([]);
   const [employeeName, setEmployeeName] = useState({});
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -31,6 +32,7 @@ const PendingAppointment = () => {
               return null;
             }
             return {
+              apptId: key, // Unique ID for the appointment
               serviceName: appointment.services || [],
               clientName: appointment.name || "",
               contact: appointment.phone || "",
@@ -38,7 +40,7 @@ const PendingAppointment = () => {
                 convertTo12HourFormat(appointment.time) || ""
               }`,
               workerName: appointment.prefEmployee || "",
-             duration: appointment.duration
+              duration: appointment.duration
                 ? convertToHoursAndMinutes(appointment.duration)
                 : "",
               assignEmployee: appointment.available_employees || "",
@@ -101,6 +103,32 @@ const PendingAppointment = () => {
     return result.trim(); // Remove any trailing whitespace
   };
 
+  const handleCancelClick = async (apptId) => {
+    try {
+      await axios.post(delete_appt_url, { apptId });
+      // Filter out the cancelled appointment from state
+      setAppointments(prevAppointments =>
+        prevAppointments.filter(appointment => appointment.apptId !== apptId)
+      );
+      console.log(`Appointment with ID ${apptId} cancelled successfully`);
+    } catch (error) {
+      console.error(`Error cancelling appointment with ID ${apptId}`, error);
+    }
+  };
+
+  const handleAssignClick = async (apptId, prefEmployee) => {
+    try {
+      await axios.post(assign_employee_url, { apptId, prefEmployee });
+      // Filter out the assigned appointment from state
+      setAppointments(prevAppointments =>
+        prevAppointments.filter(appointment => appointment.apptId !== apptId)
+      );
+      console.log(`Appointment with ID ${apptId} assigned to employee ${prefEmployee} successfully`);
+    } catch (error) {
+      console.error(`Error assigning appointment with ID ${apptId}`, error);
+    }
+  };
+
   const columns = React.useMemo(
     () => [
       {
@@ -141,7 +169,10 @@ const PendingAppointment = () => {
         Header: "Assign Employee",
         accessor: "assignEmployee",
         Cell: ({ value, row }) => (
-          <select className="pending-appt-assign-select">
+          <select
+            className="pending-appt-assign-select"
+            onChange={(e) => handleAssignClick(row.original.apptId, e.target.value)}
+          >
             <option value="">Assign</option>
             {Array.isArray(value)
               ? value.map((employee, index) => (
@@ -156,7 +187,14 @@ const PendingAppointment = () => {
       {
         Header: "Cancel",
         accessor: "cancel",
-        Cell: () => <button className="pending-appt-cancel-btn">Cancel</button>,
+        Cell: ({ row }) => (
+          <button
+            className="pending-appt-cancel-btn"
+            onClick={() => handleCancelClick(row.original.apptId)}
+          >
+            Cancel
+          </button>
+        ),
       },
     ],
     [employeeName]

@@ -90,6 +90,7 @@ const WorkerAppointment = () => {
     if (selectedEmployeeId && formData) {
       try {
         // Reverse the date format
+        setLoading(true);
         const formattedDate = reverseDateFormat(formData.date);
         console.log(formattedDate);
         
@@ -101,6 +102,7 @@ const WorkerAppointment = () => {
         
         // Navigate to the confirmed appointments page
         navigate("/ConfirmedAppointments");
+        setLoading(false);
       } catch (error) {
         console.error("Error creating appointment:", error);
         setError(error);
