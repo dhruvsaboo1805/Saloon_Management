@@ -3,6 +3,7 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import WorkerSidebar from "./components/WorkerSidebar";
+import AdminSidebar from "./components/AdminSidebar";
 import { Suspense, lazy } from "react";
 import Loader from "./components/Loader";
 
@@ -22,12 +23,14 @@ const WorkerStockPage = lazy(() => import("./pages/WorkerStockPage"));
 const Invoice = lazy(() => import("./pages/Invoice"));
 const AllAppointments = lazy(() => import("./pages/AllAppointments"));
 const ClientInfo = lazy(() => import("./pages/ClientInfo"));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 
 function App() {
   return (
     <div className="App">
        <Routes>
         <Route path="/Workerpage/*" element={<WorkerSidebar />} />
+        <Route path="/Adminpage/*" element={<AdminSidebar />} />
         <Route path="/*" element={<Sidebar />} />
       </Routes>
       <div className="main-content">
@@ -38,7 +41,7 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Dashboard />}></Route>
             <Route exact path="/pendingappointment" element={<PendingAppointment />}></Route>
-            <Route exact path="/stockmanagement" element={<StocksManagement />}></Route>
+            <Route exact path="/AdminPage/stockmanagement" element={<StocksManagement />}></Route>
             <Route exact path="/calendar" element={<SaloonCalender />}></Route>
             <Route exact path="/login" element={<Login />}></Route>
             <Route exact path="/signup" element={<SignUp />}></Route>
@@ -49,6 +52,7 @@ function App() {
             <Route exact path="/WorkerAppointment" element={<WorkerAppointment />}></Route>
             <Route exact path="/Workerpage" element={<WorkerSidePage />}></Route>
             <Route exact path="/Workerpage/Workerstockpage" element={<WorkerStockPage />}></Route>
+            <Route exact path="/AdminPage/AdminDashboard" element={<AdminDashboard />}></Route>
             <Route exact path="/invoice" element={<Invoice />}></Route>
             <Route exact path="/allappointments" element={<AllAppointments />}></Route>
             <Route exact path="/clientinfo" element={<ClientInfo />}></Route>
