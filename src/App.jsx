@@ -24,6 +24,8 @@ const Invoice = lazy(() => import("./pages/Invoice"));
 const AllAppointments = lazy(() => import("./pages/AllAppointments"));
 const ClientInfo = lazy(() => import("./pages/ClientInfo"));
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const AdminInventoryLogs = lazy(() => import("./pages/AdminInventoryLogs"));
+const AdminSettings = lazy(() => import("./pages/AdminSettings"));
 
 function App() {
   return (
@@ -40,14 +42,20 @@ function App() {
         <Suspense fallback = {<Loader />}>
           <Routes>
             <Route exact path="/" element={<Dashboard />}></Route>
+            <Route exact path="/AdminPage/AppointmentDashboard" element={<Dashboard />}></Route>
             <Route exact path="/pendingappointment" element={<PendingAppointment />}></Route>
+            <Route exact path="/AdminPage/pendingappointment" element={<PendingAppointment />}></Route>
             <Route exact path="/AdminPage/stockmanagement" element={<StocksManagement />}></Route>
             <Route exact path="/calendar" element={<SaloonCalender />}></Route>
+            <Route exact path="/AdminPage/calendar" element={<SaloonCalender />}></Route>
             <Route exact path="/login" element={<Login />}></Route>
             <Route exact path="/signup" element={<SignUp />}></Route>
             <Route exact path="/ConfirmedAppointments" element={<ConfirmedAppointments />}></Route>
+            <Route exact path="/AdminPage/ConfirmedAppointments" element={<ConfirmedAppointments />}></Route>
             <Route exact path="/CheckInAppointments" element={<CheckInAppointments />}></Route>
+            <Route exact path="/AdminPage/CheckInAppointments" element={<CheckInAppointments />}></Route>
             <Route exact path="/PaidAppointments" element={<PaidAppointments />}></Route>
+            <Route exact path="/AdminPage/PaidAppointments" element={<PaidAppointments />}></Route>
             <Route exact path="/AppointmentForm" element={<AppointmentForm />}></Route>
             <Route exact path="/WorkerAppointment" element={<WorkerAppointment />}></Route>
             <Route exact path="/Workerpage" element={<WorkerSidePage />}></Route>
@@ -55,7 +63,11 @@ function App() {
             <Route exact path="/AdminPage/AdminDashboard" element={<AdminDashboard />}></Route>
             <Route exact path="/invoice" element={<Invoice />}></Route>
             <Route exact path="/allappointments" element={<AllAppointments />}></Route>
+            <Route exact path="/AdminPage/allappointments" element={<AllAppointments />}></Route>
             <Route exact path="/clientinfo" element={<ClientInfo />}></Route>
+            <Route exact path="/AdminPage/clientinfo" element={<ClientInfo />}></Route>
+            <Route exact path="/AdminPage/AdminInventoryLogs" element={<AdminInventoryLogs />}></Route>
+            <Route exact path="/AdminPage/AdminSettings" element={<AdminSettings />}></Route>
           </Routes>
         </Suspense>
       </div>

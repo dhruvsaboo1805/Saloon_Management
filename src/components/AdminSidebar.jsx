@@ -35,7 +35,7 @@ const AdminSidebar = () => {
         <div className="sidebar-logo">SALOON</div>
         <div className="sidebar-menu-section">
           <NavLink
-            to="/"
+            to="/AdminPage/AppointmentDashboard"
             className={({ isActive }) =>
               isActive ? "navlink active" : "navlink"
             }
@@ -53,7 +53,7 @@ const AdminSidebar = () => {
           </NavLink>
 
           <NavLink
-            to="/calendar"
+            to="/AdminPage/calendar"
             className={({ isActive }) =>
               isActive ? "navlink active" : "navlink"
             }
@@ -62,7 +62,7 @@ const AdminSidebar = () => {
           </NavLink>
 
           <NavLink
-            to="/allappointments"
+            to="/AdminPage/allappointments"
             className={({ isActive }) =>
               isActive ? "navlink active" : "navlink"
             }
@@ -80,7 +80,7 @@ const AdminSidebar = () => {
           <div className="sidebar-menu-section">
             <div className="sidebar-section-title">APPOINTMENTS</div>
             <NavLink
-              to="/pendingappointment"
+              to="/AdminPage/pendingappointment"
               className={({ isActive }) =>
                 isActive ? "navlink active" : "navlink"
               }
@@ -88,7 +88,7 @@ const AdminSidebar = () => {
               <MenuItem icon={<FaTags />} label="Pending Appointments" />
             </NavLink>
             <NavLink
-              to="/ConfirmedAppointments"
+              to="/AdminPage/ConfirmedAppointments"
               className={({ isActive }) =>
                 isActive ? "navlink active" : "navlink"
               }
@@ -96,7 +96,7 @@ const AdminSidebar = () => {
               <MenuItem icon={<FaCalendar />} label="Confirmed Appointments" />
             </NavLink>
             <NavLink
-              to="/CheckInAppointments"
+              to="/AdminPage/CheckInAppointments"
               className={({ isActive }) =>
                 isActive ? "navlink active" : "navlink"
               }
@@ -107,7 +107,7 @@ const AdminSidebar = () => {
               />
             </NavLink>
             <NavLink
-              to="/PaidAppointments"
+              to="/AdminPage/PaidAppointments"
               className={({ isActive }) =>
                 isActive ? "navlink active" : "navlink"
               }
@@ -117,7 +117,7 @@ const AdminSidebar = () => {
           </div>
 
           <NavLink
-            to="/clientinfo"
+            to="/AdminPage/clientinfo"
             className={({ isActive }) =>
               isActive ? "navlink active" : "navlink"
             }
@@ -126,7 +126,7 @@ const AdminSidebar = () => {
           </NavLink>
 
           <NavLink
-            to="/clientinfo" // CHANGES ARE REQUIRED HERE
+            to="/AdminPage/clientinfo" // CHANGES ARE REQUIRED HERE
             className={({ isActive }) =>
               isActive ? "navlink active" : "navlink"
             }
@@ -134,25 +134,23 @@ const AdminSidebar = () => {
             <MenuItem icon={<FaCalendar />} label="Employees" />
           </NavLink>
           <div className="sidebar-section-title">STOCKS</div>
-            <NavLink
-              to="/AdminPage/stockmanagement"
-              className={({ isActive }) =>
-                isActive ? "navlink active" : "navlink"
-              }
-            >
-              <MenuItem icon={<FaBoxOpen />} label="View Inventory" />
-            </NavLink>
+          <NavLink
+            to="/AdminPage/stockmanagement"
+            className={({ isActive }) =>
+              isActive ? "navlink active" : "navlink"
+            }
+          >
+            <MenuItem icon={<FaBoxOpen />} label="View Inventory" />
+          </NavLink>
 
-            <NavLink
-              to="/AdminPage/stockmanagement"
-              className={({ isActive }) =>
-                isActive ? "navlink active" : "navlink"
-              }
-            >
-              <MenuItem icon={<FaBoxOpen />} label="Inventory Logs" />
-            </NavLink>
-
-         
+          <NavLink
+            to="/AdminPage/AdminInventoryLogs"
+            className={({ isActive }) =>
+              isActive ? "navlink active" : "navlink"
+            }
+          >
+            <MenuItem icon={<FaBoxOpen />} label="Inventory Logs" />
+          </NavLink>
         </div>
         {/* <div className="sidebar-menu-section">
             <div className="sidebar-section-title">PAGES</div>
@@ -166,7 +164,14 @@ const AdminSidebar = () => {
             <MenuItem icon={<FaTable />} label="Table" />
           </div> */}
         <div className="sidebar-menu-section">
-          <MenuItem icon={<FaCog />} label="Settings" />
+          <NavLink
+            to="/AdminPage/AdminSettings"
+            className={({ isActive }) =>
+              isActive ? "navlink active" : "navlink"
+            }
+          >
+            <MenuItem icon={<FaCog />} label="Settings" />
+          </NavLink>
           <MenuItem icon={<FaSignOutAlt />} label="Logout" />
         </div>
       </div>
