@@ -1,4 +1,4 @@
-.worker-card {
+/* .worker-card {
     text-align: center;
     padding: 20px;
     border: 1px solid #e0e0e0;
@@ -15,4 +15,57 @@
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 10px;
-}
+} */
+
+.employee-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    width: 200px;
+    margin: 10px;
+    position: relative;
+  }
+  
+  .employee-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  
+  /* .employee-card h2 {
+    font-size: 1.2em;
+    margin: 10px 0;
+  }
+   */
+  .employee-card p {
+    margin: 5px 0;
+    font-size: 0.8rem;
+  }
+  .employee-card span {
+    color: #000;
+    font-weight: 600;
+  }
+  
+  .employee-actions {
+    bottom: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 2rem;
+  }
+  
+  .employee-actions button {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .employee-actions button:hover {
+    background-color: #0056b3;
+  }

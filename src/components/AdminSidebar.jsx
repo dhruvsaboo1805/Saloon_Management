@@ -126,7 +126,7 @@ const AdminSidebar = () => {
           </NavLink>
 
           <NavLink
-            to="/AdminPage/clientinfo" // CHANGES ARE REQUIRED HERE
+            to="/AdminPage/AdminEmployeesPage" 
             className={({ isActive }) =>
               isActive ? "navlink active" : "navlink"
             }

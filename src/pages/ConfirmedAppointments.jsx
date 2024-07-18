@@ -7,6 +7,8 @@ import checkicon from "../assets/check-in-icon.png";
 
 const apiUrl = import.meta.env.VITE_API_CONFIRMED_APPOINTMENTS;
 const employee_name = import.meta.env.VITE_API_PENDING_APPOINTMENTS_EMPLOYEES;
+const check_in_url = import.meta.env.VITE_API_CHECK_IN_APPOINTMENTS;
+const check_in_info = import.meta.env.VITE_API_CHECK_IN_APPOINTMENTS_INFO;
 
 const ConfirmedAppointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -44,6 +46,7 @@ const ConfirmedAppointments = () => {
                 ? convertToHoursAndMinutes(appointment.duration)
                 : "",
               checkIn: "Check in",
+              appointmentId: key, // Add appointmentId to the formatted data
             };
             console.log("Formatted appointment data:", formattedAppointment);
             return formattedAppointment;
@@ -61,8 +64,8 @@ const ConfirmedAppointments = () => {
           "Filtered and formatted appointments:",
           formattedAppointments
         );
-         // Reverse the array to display newest entries first
-         setAppointments(formattedAppointments.reverse());
+        // Reverse the array to display newest entries first
+        setAppointments(formattedAppointments.reverse());
       } catch (error) {
         console.error("API fetching error", error);
       }
@@ -96,7 +99,7 @@ const ConfirmedAppointments = () => {
       minuteInt < 10 ? `0${minuteInt}` : minuteInt
     } ${ampm}`;
   };
-  
+
   const convertToHoursAndMinutes = (minutes) => {
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
@@ -152,7 +155,7 @@ const ConfirmedAppointments = () => {
         Cell: ({ row }) => (
           <button
             className="confirm-appt-checkin-btn"
-            onClick={() => handleCheckInClick(row.original)}
+            onClick={() => handleCheckIn(row.original)}
           >
             Check in
           </button>
@@ -162,15 +165,21 @@ const ConfirmedAppointments = () => {
     [employeeName]
   );
 
-  const handleCheckInClick = (row) => {
-    setCurrentData(row);
-    setAppointmentId("");
-    setShowModal(true);
-  };
 
-  const handleConfirm = () => {
-    console.log("Check In confirmed with Appointment ID:", appointmentId);
-    setShowModal(false);
+  const handleCheckIn = async (row) => {
+    try {
+      await axios.post(check_in_url, { apptId: row.appointmentId });
+      console.log("Check In confirmed with Appointment ID:", row.appointmentId);
+
+      // Remove the checked-in appointment from the list
+      setAppointments((prevAppointments) =>
+        prevAppointments.filter(
+          (appointment) => appointment.appointmentId !== row.appointmentId
+        )
+      );
+    } catch (error) {
+      console.error("Error confirming check-in:", error);
+    }
   };
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
@@ -187,6 +196,12 @@ const ConfirmedAppointments = () => {
     <div className="confirm-appointments-container">
       <div className="confirm-appointments-header">
         <h2>Confirmed Appointments</h2>
+        <button
+            className="confirm-appt-checkin-btn"
+            onClick={() => showModal(true)}
+          >
+            Check in
+          </button>
       </div>
       <table {...getTableProps()} className="confirm-appointments-table">
         <thead>
@@ -218,19 +233,9 @@ const ConfirmedAppointments = () => {
           <div className="confirm-appointments-modal-content">
             <div className="confirm-appointments-heading">
               <img src={checkicon} alt="" />
-              <button
-                className="confirm-appointments-close-button"
-                onClick={() => setShowModal(false)}
-              >
-                ×
-              </button>
             </div>
             <h2>Check In</h2>
             <form>
-              <div>
-                <label>Client Name</label>
-                <input type="text" value={currentData.clientName} readOnly />
-              </div>
               <div>
                 <label>User Check In Appointment I.D</label>
                 <input
@@ -238,6 +243,14 @@ const ConfirmedAppointments = () => {
                   value={appointmentId}
                   onChange={(e) => setAppointmentId(e.target.value)}
                 />
+              </div>
+              <div>
+                <label>Client Name</label>
+                <input type="text" value={currentData.clientName} readOnly />
+              </div>
+              <div>
+                <label>Employee Name</label>
+                <input type="text" value={currentData.workerAssigned} readOnly />
               </div>
               <button
                 type="button"

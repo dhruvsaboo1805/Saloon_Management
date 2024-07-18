@@ -1,0 +1,30 @@
+.admin-employee-list-container {
+    width: 90%;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .admin-employee-list-container h1 {
+    margin-bottom: 20px;
+  }
+  
+  .admin-add-new-member {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .admin-add-new-member:hover {
+    background-color: #0056b3;
+  }
+  
+  .admin-employee-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  

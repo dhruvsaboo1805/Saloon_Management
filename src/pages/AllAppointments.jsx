@@ -65,7 +65,7 @@ const AllAppointments = () => {
     };
 
     fetchData();
-  }, []);
+  } , []);
 
   const convertTo12HourFormat = (time) => {
     if (!time) return "";

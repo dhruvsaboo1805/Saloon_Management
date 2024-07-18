@@ -106,6 +106,7 @@ const AppointmentForm = () => {
     const year = date.getFullYear();
     return `${year}-${month}-${day}`;
   };
+  
 
   useEffect(() => {
     axios
