@@ -182,6 +182,61 @@ const ConfirmedAppointments = () => {
     }
   };
 
+  const handleManualCheckIn = async (newAppointmentId) => {
+    try {
+      const response = await axios.post(check_in_info, { apptId: newAppointmentId });
+      const data = response.data;
+      console.log("data found -> " , data);
+      if (data.sucess) {
+        setCurrentData({
+          clientName: data.name,
+          // workerAssigned: employeeName[data.assignedEmployee] || data.assignedEmployee,
+        });
+      } else {
+        console.error("No appointment found with the given ID");
+      }
+    } catch (error) {
+      console.error("Error fetching appointment details:", error);
+    }
+  };
+
+  const handleAppointmentIdChange = (e) => {
+    const newAppointmentId = e.target.value;
+    console.log("id types is -> " , newAppointmentId);
+    setAppointmentId(newAppointmentId);
+    alert(appointmentId);
+    if (newAppointmentId.length === 21) {
+      handleManualCheckIn(newAppointmentId);
+    }
+  };
+
+  const handleConfirm = async () => {
+    try {
+      const response = await axios.post(check_in_url, { apptId: appointmentId });
+      console.log("Check In confirmed with Appointment ID:", appointmentId);
+
+      const newAppointment = {
+        serviceName: response.data.services || [],
+        clientName: response.data.name || "",
+        contact: response.data.phone || "",
+        dateTime: `${response.data.date || ""} - ${convertTo12HourFormat(response.data.time) || ""}`,
+        workerAssigned: response.data.assignedEmployee || "",
+        duration: response.data.duration ? convertToHoursAndMinutes(response.data.duration) : "",
+        checkIn: "Checked in",
+        appointmentId: appointmentId,
+      };
+
+      // Add the new appointment to the list and remove the modal
+      setAppointments((prevAppointments) => [newAppointment, ...prevAppointments]);
+      setShowModal(false);
+      setAppointmentId("");
+      setCurrentData({});
+      window.reload();
+    } catch (error) {
+      console.error("Error confirming check-in:", error);
+    }
+  };
+
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({
       columns,
@@ -198,7 +253,7 @@ const ConfirmedAppointments = () => {
         <h2>Confirmed Appointments</h2>
         <button
             className="confirm-appt-checkin-btn"
-            onClick={() => showModal(true)}
+            onClick={() => setShowModal(true)}
           >
             Check in
           </button>
@@ -241,17 +296,17 @@ const ConfirmedAppointments = () => {
                 <input
                   type="text"
                   value={appointmentId}
-                  onChange={(e) => setAppointmentId(e.target.value)}
+                  onChange={handleAppointmentIdChange}
                 />
               </div>
               <div>
                 <label>Client Name</label>
                 <input type="text" value={currentData.clientName} readOnly />
               </div>
-              <div>
+              {/* <div>
                 <label>Employee Name</label>
                 <input type="text" value={currentData.workerAssigned} readOnly />
-              </div>
+              </div> */}
               <button
                 type="button"
                 onClick={handleConfirm}

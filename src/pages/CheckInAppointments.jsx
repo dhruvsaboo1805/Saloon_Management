@@ -5,6 +5,7 @@ import "../styles/CheckInAppointments.css";
 import PaymentPopUp from "../components/PaymentPopUp";
 import Loader from "../components/Loader";
 
+
 const apiUrl = import.meta.env.VITE_API_CHECKED_IN_APPOINTMENTS;
 const employeeNameUrl = import.meta.env.VITE_API_PENDING_APPOINTMENTS_EMPLOYEES;
 
@@ -198,8 +199,7 @@ const CheckInAppointments = () => {
       </table>
       {showPopup && selectedAppointment && (
         <PaymentPopUp
-          amount={selectedAppointment.payment}
-          transactionId={selectedAppointment.txnIds[0] || "185SDFWE774"}
+          appt = {selectedAppointment}
           totalAmount={selectedAppointment.totalBill}
           onClose={() => setShowPopup(false)}
         />
