@@ -7,7 +7,7 @@ import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaClock, Fa
 import { useNavigate } from "react-router-dom";
 
 const services_data_url = import.meta.env.VITE_API_APPOINTMENT_FORM_SERVICES;
-const phone_number_to_data = import.meta.env.VITE_API_APPOINTMENT_FORM_PGONE_NUMBER_TO_CLIENT_DATA;
+const phone_number_to_data = import.meta.env.VITE_API_CLIENT_INFO_DETAILS;
 const timings_url = import.meta.env.VITE_API_APPOINTMENT_FORM_TIMINGS;
 
 const AppointmentForm = () => {

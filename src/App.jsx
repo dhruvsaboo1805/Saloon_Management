@@ -28,6 +28,7 @@ const AdminInventoryLogs = lazy(() => import("./pages/AdminInventoryLogs"));
 const AdminSettings = lazy(() => import("./pages/AdminSettings"));
 const AdminEmployeesPage = lazy(() => import("./pages/AdminEmployeesPage"));
 const CustomerSideAppt = lazy(() => import("./pages/CustomerSideAppt"));
+const AdminServicesList = lazy(() => import("./pages/AdminServicesList"));
 
 function App() {
   return (
@@ -72,6 +73,7 @@ function App() {
             <Route exact path="/AdminPage/AdminInventoryLogs" element={<AdminInventoryLogs />}></Route>
             <Route exact path="/AdminPage/AdminSettings" element={<AdminSettings />}></Route>
             <Route exact path="/AdminPage/AdminEmployeesPage" element={<AdminEmployeesPage />}></Route>
+            <Route exact path="/AdminPage/AdminServicesList" element={<AdminServicesList />}></Route>
             <Route exact path="/CustomerPage/CustomerBookingForm" element={<CustomerSideAppt />}></Route>
           </Routes>
         </Suspense>

@@ -115,6 +115,16 @@ const AdminSidebar = () => {
               <MenuItem icon={<FaPhone />} label="Paid Appointments" />
             </NavLink>
           </div>
+              
+          <NavLink
+            to="/AdminPage/AdminServicesList"
+            className={({ isActive }) =>
+              isActive ? "navlink active" : "navlink"
+            }
+          >
+            <MenuItem icon={<FaCalendar />} label="Services" />
+          </NavLink>
+
 
           <NavLink
             to="/AdminPage/clientinfo"

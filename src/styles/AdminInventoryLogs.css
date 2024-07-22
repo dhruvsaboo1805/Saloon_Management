@@ -20,3 +20,24 @@
     margin-left: 2rem;
     margin-top: 2rem;
 }
+
+.admin-inventory-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.admin-inventory-pagination button {
+  padding: 10px 20px;
+  margin: 0 5px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.admin-inventory-pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

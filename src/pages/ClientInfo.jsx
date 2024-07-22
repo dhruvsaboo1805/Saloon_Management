@@ -5,10 +5,13 @@ import Loader from "../components/Loader";
 import "../styles/ClientInfo.css";
 
 const apiUrl = import.meta.env.VITE_API_ALL_CLIENT_INFO;
+const client_info_url = import.meta.env.VITE_API_CLIENT_INFO_DETAILS;
 
 const ClientInfo = () => {
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showPopup, setShowPopup] = useState(false);
+  const [services, setServices] = useState([]);
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -27,7 +30,7 @@ const ClientInfo = () => {
               name: client.name || "",
               email: client.email || "",
               phone: client.phone || "",
-              gender: client.gender == 'M' ? 'Male' : "Female" || "",
+              gender: client.gender === 'M' ? 'Male' : "Female" || "",
               pincode: client.pincode || "",
             };
           })
@@ -51,6 +54,26 @@ const ClientInfo = () => {
     fetchClients();
   }, []);
 
+  const handleViewInfo = async (phone) => {
+    console.log("Fetching info for phone:", phone);
+    try {
+      const response = await axios.post(client_info_url, { phone });
+      const data = response.data;
+
+      console.log("Response data:", data);
+
+      if (data.sucess) {
+        setServices(data.services);
+        console.log("Services fetched:", data.services);
+        setShowPopup(true);
+      } else {
+        console.error("Failed to fetch client details.");
+      }
+    } catch (error) {
+      console.error("Error fetching client details: ", error);
+    }
+  };
+
   const columns = React.useMemo(
     () => [
       { Header: "Name", accessor: "name" },
@@ -61,7 +84,14 @@ const ClientInfo = () => {
       {
         Header: "View Information",
         accessor: "viewInfo",
-        Cell: () => <button className="client-info-button">View Info</button>,
+        Cell: ({ row }) => (
+          <button
+            className="client-info-button"
+            onClick={() => handleViewInfo(row.original.phone)}
+          >
+            View Info
+          </button>
+        ),
       },
     ],
     []
@@ -73,7 +103,7 @@ const ClientInfo = () => {
   });
 
   if (loading) {
-    return <Loader />; // Display the loader while fetching data
+    return <Loader />;
   }
 
   return (
@@ -102,6 +132,20 @@ const ClientInfo = () => {
           })}
         </tbody>
       </table>
+
+      {showPopup && (
+        <div className="client-popup">
+          <div className="client-popup-content">
+            <h2>Service IDs</h2>
+            <ul>
+              {services.map((service, index) => (
+                <li key={index}>{service}</li>
+              ))}
+            </ul>
+            <button className="client-info-button" onClick={() => setShowPopup(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
