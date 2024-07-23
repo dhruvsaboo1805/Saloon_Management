@@ -137,7 +137,7 @@ const CheckInAppointments = () => {
       {
         Header: "Assigned Worker",
         accessor: "workerAssigned",
-        Cell: ({ value }) => <span>{employeeName[value]}</span>,
+        Cell: ({ value }) => <span>{employeeName[value]?.name}</span>,
       },
       {
         Header: "Duration",

@@ -159,7 +159,7 @@ const PendingAppointment = () => {
       {
         Header: "Preferred Worker",
         accessor: "workerName",
-        Cell: ({ value }) => <span>{employeeName[value]}</span>,
+        Cell: ({ value }) => <span>{employeeName[value]?.name}</span>,
       },
       {
         Header: "Duration",
@@ -177,7 +177,7 @@ const PendingAppointment = () => {
             {Array.isArray(value)
               ? value.map((employee, index) => (
                   <option key={index} value={employee}>
-                    {employeeName[employee]}
+                    {employeeName[employee]?.name}
                   </option>
                 ))
               : null}

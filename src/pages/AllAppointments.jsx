@@ -31,7 +31,7 @@ const AllAppointments = () => {
               clientName: appointment.name || "",
               contact: appointment.phone || "",
               dateTime: `${appointment.date || ""} - ${convertTo12HourFormat(appointment.time) || ""}`,
-              workerassigned: appointment.assignedEmployee ? employeeName[appointment.assignedEmployee] : "",
+              workerassigned: appointment.assignedEmployee ? employeeName[appointment.assignedEmployee]?.name || "" : "",
               duration: appointment.duration ? convertToHoursAndMinutes(appointment.duration) : "",
               status: appointment.status || "",
             };

@@ -67,7 +67,14 @@ const WorkerAppointment = () => {
           const employeeData = employeeResponse.data;
           console.log("employeeData ", employeeData);
 
-          const employeeDetails = matchingEmployeeIds.map((id) => ({ id, name: employeeData[id] }));
+          const employeeDetails = matchingEmployeeIds.map((id) => ({
+            id,
+            name: employeeData[id]?.name,
+            designation: employeeData[id]?.designation,
+            imgUrl: employeeData[id]?.imgUrl,
+            phone: employeeData[id]?.phone,
+          }))
+          .filter((employee) => employee.name && employee.designation && employee.phone);
           console.log("employeeDetails ", employeeDetails);
           setEmployees(employeeDetails);
           setLoading(false);

@@ -1,30 +1,117 @@
 .admin-employee-list-container {
-    width: 90%;
-    margin: 0 auto;
-    text-align: center;
-  }
-  
-  .admin-employee-list-container h1 {
-    margin-bottom: 20px;
-  }
-  
-  .admin-add-new-member {
-    background-color: #007bff;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-bottom: 20px;
-  }
-  
-  .admin-add-new-member:hover {
-    background-color: #0056b3;
-  }
-  
-  .admin-employee-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
+  width: 90%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.admin-employee-list-container h1 {
+  margin-bottom: 20px;
+}
+
+.admin-add-new-member {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.admin-add-new-member:hover {
+  background-color: #0056b3;
+}
+
+.admin-employee-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.admin-employee-Modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.admin-employee-Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+}
+
+.admin-employee-form-group {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.admin-employee-form-group label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.admin-employee-form-group input[type="text"],
+.admin-employee-form-group input[type="file"] {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.admin-employee-image-upload {
+  display: flex;
+  align-items: center;
+}
+
+.admin-employee-add-image {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.admin-employee-form-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.admin-employee-form-buttons button {
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.admin-employee-form-buttons button[type="button"] {
+  background-color: #6c757d;
+  color: white;
+}
+
+.admin-employee-form-buttons button[type="button"]:hover {
+  background-color: #5a6268;
+}
+
+.admin-employee-form-buttons button[type="submit"] {
+  background-color: #0d1dfc;
+  color: white;
+}
+
+.admin-employee-form-buttons button[type="submit"]:hover {
+  background-color: #424ef8;
+}

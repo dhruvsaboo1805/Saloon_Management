@@ -54,7 +54,7 @@ const SaloonCalender = () => {
         const employeeData = response.data;
         const employeeArray = Object.keys(employeeData)
           .filter((key) => key !== "success")
-          .map((key) => ({ id: key, name: employeeData[key], role: "" }));
+          .map((key) => ({ id: key, name: employeeData[key]?.name, role: "" }));
 
         setEmployees(employeeArray);
       } catch (error) {

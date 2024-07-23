@@ -26,7 +26,7 @@ const AdminInventoryLogs = () => {
 
         // Map employee IDs to names in the logs data
         const updatedLogs = logs.map((log) => ({
-          employeeName: employeeNamesData[log.empId] || "Unknown",
+          employeeName: employeeNamesData[log.empId]?.name || "Unknown",
           productUsed: log.inventory_used,
           quantity: log.quantity,
           type: log.operation,
