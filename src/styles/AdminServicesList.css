@@ -1,39 +1,12 @@
+/* AdminServicesList.css */
+
+/* Table styles */
 .admin-services-table {
   padding: 2rem;
   width: 95%;
   border-collapse: collapse;
   margin: 0 auto;
 }
-.admin-services-subheading-popup{
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1.2rem;
-}
-.admin-services-heading {
-  padding: 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.admin-services-heading h2 {
-  margin: 0;
-}
-
-.admin-services-heading button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.admin-services-heading button:hover {
-  background-color: #0056b3;
-}
-
 
 .admin-header-row {
   background-color: #f8f9fa;
@@ -83,19 +56,16 @@
   color: #dc3545;
 }
 
+/* Modal styles */
 .admin-modal {
   position: absolute;
   top: 50%;
   left: 50%;
-  right: auto;
-  bottom: auto;
-  margin-right: -50%;
   transform: translate(-50%, -50%);
   background: white;
   padding: 20px;
   border-radius: 10px;
   width: 500px;
-  height: auto;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
@@ -110,27 +80,71 @@
   z-index: 1000;
 }
 
-.admin-modal h2 {
-  margin-top: 0;
+/* Modal heading */
+.admin-services-subheading-popup {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.admin-services-img-subheading-popup {
+  width: 40px;
+  height: 40px;
+}
+
+/* Form styles */
+.admin-employee-form-group {
+  margin-bottom: 15px;
 }
 
 .admin-modal .form-group {
+  display: flex;
+  align-items: center;
   margin-bottom: 15px;
 }
 
 .admin-modal .form-group label {
-  display: block;
-  margin-bottom: 5px;
+  margin-right: 10px;
+  font-weight: bold;
+  flex-basis: 30%;
+  text-align: left;
 }
 
 .admin-modal .form-group input,
 .admin-modal .form-group textarea {
-  width: 100%;
   padding: 10px;
-  border: 1px solid #dee2e6;
+  font-size: 14px;
+  border: 1px solid #ccc;
   border-radius: 5px;
+  flex-basis: 65%;
 }
 
+/* Image upload styles */
+.admin-employee-image-upload {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px dashed #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  cursor: pointer;
+  background-color: #f9f9f9;
+}
+
+.admin-employee-image-upload img {
+  max-width: 70px;
+  max-height: 70px;
+  border-radius: 50%;
+}
+
+.admin-employee-image-upload-text {
+  color: rgba(0, 0, 0, 0.5); /* Slightly transparent text color */
+  font-size: 16px;
+  text-align: center;
+}
+
+/* Buttons */
 .admin-modal .form-buttons {
   display: flex;
   justify-content: flex-end;
@@ -139,6 +153,7 @@
 
 .admin-modal .form-buttons button {
   padding: 10px 20px;
+  font-size: 14px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -149,7 +164,41 @@
   color: white;
 }
 
+.admin-modal .form-buttons button[type="button"]:hover {
+  background-color: #5a6268;
+}
+
 .admin-modal .form-buttons button[type="submit"] {
   background-color: #007bff;
   color: white;
+}
+
+.admin-modal .form-buttons button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Heading styles */
+.admin-services-heading {
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.admin-services-heading h2 {
+  margin: 0;
+}
+
+.admin-services-heading button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.admin-services-heading button:hover {
+  background-color: #0056b3;
 }

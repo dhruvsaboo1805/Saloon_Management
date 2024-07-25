@@ -21,7 +21,7 @@ const EmployeeCard = ({ employee, onSelect }) => {
         <span>Contact: </span> {employee.phone}
       </p>
       <p>
-        <span>WorkerI.D: </span> {employee.id}
+        <span>Worker I.D: </span> {employee.id}
       </p>
     </div>
   );

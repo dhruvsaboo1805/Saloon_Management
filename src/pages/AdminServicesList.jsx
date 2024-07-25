@@ -30,11 +30,11 @@ const AdminServicesList = () => {
       try {
         const response = await axios.get(all_services_url);
         const fetchedData = response.data.services.map((service) => ({
-          image: img,
+          image: service.imgUrl,
           serviceName: service.name,
           price: `$${service.price}.00`,
           duration: `${service.duration}min`,
-          description: service.serviceDes,
+          description: service.serviceDesc,
         }));
         setData(fetchedData);
       } catch (error) {
@@ -102,22 +102,8 @@ const AdminServicesList = () => {
     }
   };
 
-  const validateForm = () => {
-    if (!newService.serviceName || !newService.price || !newService.duration || !newService.description) {
-      setError("All fields are required");
-      return false;
-    }
-    if (isNaN(newService.price)) {
-      setError("Price must be a number");
-      return false;
-    }
-    setError("");
-    return true;
-  };
-
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
 
     if (isEditing) {
       const updatedData = data.map((service, index) =>
