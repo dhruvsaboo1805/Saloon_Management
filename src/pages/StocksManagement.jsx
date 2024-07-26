@@ -4,42 +4,45 @@ import axios from "axios";
 import "../styles/StockManagement.css";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import add_product from "../assets/add_product.png";
+import Loader from "../components/Loader";
 
 const stock_data_url = import.meta.env.VITE_API_INVENTORY_STOCK_MANAGEMENT;
+const add_stock_url = import.meta.env.VITE_API_ADD_STOCKS;
 
 const StocksManagement = () => {
   const [data, setData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
   const [newProduct, setNewProduct] = useState({
     image: "",
     productName: "",
-    category: "",
     price: "",
     piece: "",
-    availableTypes: []
   });
   const [imagePreview, setImagePreview] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(stock_data_url);
         const fetchedData = response.data;
 
         const formattedData = Object.keys(fetchedData).map((key) => ({
-          image: fetchedData[key].image,
+          image: fetchedData[key].imgUrl,
           productName: fetchedData[key].name,
-          category: fetchedData[key].category,
-          price: fetchedData[key].price,
-          piece: fetchedData[key].quantity,
-          availableTypes: fetchedData[key].availableTypes || [],
+          price: parseInt(fetchedData[key].price, 10),
+          piece: parseInt(fetchedData[key].quantity, 10), 
         }));
 
-        setData((prevData) => [...prevData, ...formattedData]);
+
+        setData(formattedData);
       } catch (error) {
         console.error("Error fetching data: ", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -60,27 +63,12 @@ const StocksManagement = () => {
         accessor: "productName",
       },
       {
-        Header: "Category",
-        accessor: "category",
-      },
-      {
         Header: "Price",
         accessor: "price",
       },
       {
         Header: "Piece",
         accessor: "piece",
-      },
-      {
-        Header: "Available Types",
-        accessor: "availableTypes",
-        Cell: ({ cell: { value } }) => (
-          <div className="stock-available-types">
-            {value.map((type, index) => (
-              <span key={index} className={`stock-type-dot ${type}`}></span>
-            ))}
-          </div>
-        ),
       },
       {
         Header: "Action",
@@ -103,7 +91,6 @@ const StocksManagement = () => {
     useTable({ columns, data });
 
   const openModal = (isEdit = false, index = null) => {
-    console.log("Opening modal with edit:", isEdit, "and index:", index); // Debugging line
     setIsOpen(true);
     setIsEditMode(isEdit);
     setEditIndex(index);
@@ -111,22 +98,18 @@ const StocksManagement = () => {
     if (isEdit && index !== null) {
       const product = data[index];
       setNewProduct({
-        image: product.image,
+        image: "",
         productName: product.productName,
-        category: product.category,
         price: product.price,
         piece: product.piece,
-        availableTypes: product.availableTypes,
       });
       setImagePreview(product.image);
     } else {
       setNewProduct({
         image: "",
         productName: "",
-        category: "",
         price: "",
         piece: "",
-        availableTypes: [],
       });
       setImagePreview("");
     }
@@ -141,27 +124,32 @@ const StocksManagement = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    setNewProduct({ ...newProduct, image: file });
-    setImagePreview(URL.createObjectURL(file));
+    if (file) {
+      setNewProduct({ ...newProduct, image: file });
+      setImagePreview(URL.createObjectURL(file));
+    }
   };
 
   const handleSubmit = async () => {
     try {
-      let imageUrl = imagePreview;
+      const formData = new FormData();
+      formData.append("name", newProduct.productName);
+      formData.append("quantity", newProduct.piece);
+      formData.append("price", newProduct.price);
 
-      if (newProduct.image && typeof newProduct.image !== 'string') {
-        const uploadUrl = "your-image-upload-endpoint";
-        const formData = new FormData();
-        formData.append("file", newProduct.image);
-        
-        // Upload image
-        const uploadResponse = await axios.post(uploadUrl, formData);
-        imageUrl = uploadResponse.data.url; // Adjust based on your API response
+      if (newProduct.image) {
+        formData.append("img", newProduct.image);
       }
+
+      const response = await axios.post(add_stock_url, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       const newProductWithImageUrl = {
         ...newProduct,
-        image: imageUrl,
+        image: response.data.imageUrl || imagePreview,
       };
 
       if (isEditMode) {
@@ -175,21 +163,27 @@ const StocksManagement = () => {
       setNewProduct({
         image: "",
         productName: "",
-        category: "",
         price: "",
         piece: "",
-        availableTypes: [],
       });
       setImagePreview("");
       closeModal();
     } catch (error) {
-      console.error("Error uploading image: ", error);
+      console.error("Error uploading data: ", error);
     }
   };
 
   const handleEdit = (index) => {
     openModal(true, index);
   };
+
+  const handleClick = () => {
+    document.getElementById("fileInput").click();
+  };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div>
@@ -231,13 +225,15 @@ const StocksManagement = () => {
               </h3>
             </div>
             <form className="stock-modal-form">
-              <div className="stock-form-group">
-                <label>Service Image</label>
-                <div className="stock-image-upload">
+              <div className="stock-form-group" onClick={handleClick}>
+                <label>Product Image</label>
+                <div className="stock-image-upload" >
                   <input
                     type="file"
+                    id="fileInput"
                     name="image"
                     onChange={handleImageChange}
+                    // accept="image/*"
                   />
                   {imagePreview && (
                     <img

@@ -5,7 +5,7 @@ const Cards = ({heading , img ,values}) => {
   return (
     <div className='cards-container'>
       <div className="cards-heading-values">
-        <p>{heading}</p>
+        <p className='cards-main-heading'>{heading}</p>
         <p>{values}</p>
       </div>
       <div className="cards-img">

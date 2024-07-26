@@ -19,8 +19,10 @@ const AdminEmployeesPage = () => {
   const [error, setError] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+  const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [employeeToDelete, setEmployeeToDelete] = useState(null);
   const [newEmployee, setNewEmployee] = useState({
     name: "",
     phone: "",
@@ -82,6 +84,16 @@ const AdminEmployeesPage = () => {
     setEditModalIsOpen(false);
     setSelectedFile(null); // Reset the selected file
     setSelectedEmployee(null);
+  };
+
+  const openDeleteModal = (employee) => {
+    setEmployeeToDelete(employee);
+    setDeleteModalIsOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModalIsOpen(false);
+    setEmployeeToDelete(null);
   };
 
   const handleAddWorker = async (event) => {
@@ -162,13 +174,14 @@ const AdminEmployeesPage = () => {
     }));
   };
 
-  const handleDeleteWorker = async (id) => {
+  const handleDeleteWorker = async () => {
     try {
-      await axios.post(delete_employee_url, { empId: id });
+      await axios.post(delete_employee_url, { empId: employeeToDelete.id });
 
       setEmployees((prevEmployees) =>
-        prevEmployees.filter((employee) => employee.id !== id)
+        prevEmployees.filter((employee) => employee.id !== employeeToDelete.id)
       );
+      closeDeleteModal();
     } catch (error) {
       console.error("Error deleting worker:", error);
     }
@@ -203,7 +216,7 @@ const AdminEmployeesPage = () => {
                 <FaTrash
                   className="button"
                   style={{ color: "red" }}
-                  onClick={() => handleDeleteWorker(employee.id)}
+                  onClick={() => openDeleteModal(employee)}
                 />
               </div>
             </div>
@@ -371,6 +384,26 @@ const AdminEmployeesPage = () => {
             <button type="submit">Confirm</button>
           </div>
         </form>
+      </Modal>
+      <Modal
+        isOpen={deleteModalIsOpen}
+        onRequestClose={closeDeleteModal}
+        contentLabel="Delete Worker"
+        className="admin-employee-Modal"
+        overlayClassName="admin-employee-Overlay"
+      >
+        <div className="admin-employee-heading-delete-popup">
+          <h2>Confirm Deletion</h2>
+        </div>
+        <p>Are you sure you want to delete {employeeToDelete?.name} ?</p>
+        <div className="admin-employee-form-buttons-delete-popup">
+          <button type="button" onClick={closeDeleteModal}>
+            Cancel
+          </button>
+          <button type="button" onClick={handleDeleteWorker}>
+            Confirm
+          </button>
+        </div>
       </Modal>
     </div>
   );

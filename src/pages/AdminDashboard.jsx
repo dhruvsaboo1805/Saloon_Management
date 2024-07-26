@@ -7,33 +7,75 @@ import Loader from "../components/Loader";
 import booking from "../assets/booking.png";
 import week_booking from "../assets/week_booking.png";
 import sales from "../assets/sales.png";
-// import sales from "../assets/sales.png";
 import AdminSalesChart from "../components/AdminSalesChart";
 
+const apiUrl = import.meta.env.VITE_API_ADMIN_DASHBOARD;
+
+// Function to generate random color
+const getRandomColor = () => {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+};
+
 const AdminDashboard = () => {
-  const initialPanelData = [
-    { id: "1", heading: "Today Booking", img: booking, panelinfo: 0 },
-    { id: "2", heading: "Week Booking", img: week_booking, panelinfo: 0 },
-    { id: "3", heading: "Total Sales", img: sales, panelinfo: 0 },
-    { id: "4", heading: "Weekly Sales", img: sales, panelinfo: 0 },
-  ];
+  const [panelData, setPanelData] = useState([]);
+  const [apptDashCardsData, setApptDashCardsData] = useState([]);
+  const [services, setServices] = useState([]);
+  const [weeklyRecord, setWeeklyRecord] = useState({});
+  const [loading, setLoading] = useState(true); // Loading state
 
-  const initialApptDashCardsData = [
-    { status: "Pending Appointment", count: 0, color: "#8280FF" },
-    { status: "Confirmed Appointment", count: 0, color: "#FEC53D" },
-    { status: "Checkin Appointment", count: 0, color: "#4AD991" },
-    { status: "Paid Appointment", count: 0, color: "#A6B5FF" },
-  ];
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      setLoading(true); // Set loading to true when fetching starts
+      try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
 
-  const services = [
-    { name: "Hair Colour", sales: 45 },
-    { name: "Nail Polish", sales: 29 },
-    { name: "Hair Cutting", sales: 18 },
-    { name: "Spa and Massage", sales: 25 },
-    { name: "Nail Polish", sales: 29 },
-    { name: "Hair Cutting", sales: 18 },
-    { name: "Spa and Massage", sales: 25 },
-  ];
+        if (data.sucess) {
+          setPanelData([
+            { id: "1", heading: "Today Booking", img: booking, panelinfo: data.todays_booking },
+            { id: "2", heading: "Week Booking", img: week_booking, panelinfo: data.weekly_booking },
+            { id: "3", heading: "Total Sales", img: sales, panelinfo: data.all_sales },
+            { id: "4", heading: "Weekly Sales", img: sales, panelinfo: data.weekly_sales },
+          ]);
+
+          setApptDashCardsData([
+            { status: "Pending Appointment", count: data.pending_amount || 0, color: "#8280FF" },
+            { status: "Confirmed Appointment", count: data.confirmed_sales || 0, color: "#FEC53D" },
+            { status: "Checkin Appointment", count: data.checkedIn_sales || 0, color: "#4AD991" },
+            { status: "Paid Appointment", count: data.all_sales || 0, color: "#A6B5FF" },
+          ]);
+
+          // Extract service names and sales values with random colors
+          const serviceList = Object.entries(data.items_overview).map(([name, sales]) => ({
+            name,
+            sales,
+            color: getRandomColor(), // Assign a random color
+          }));
+          setServices(serviceList);
+
+          // Set weekly record data
+          setWeeklyRecord(data.weeklyRecord);
+        } else {
+          console.error("API fetch unsuccessful");
+        }
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      } finally {
+        setLoading(false); // Set loading to false when fetching ends
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  if (loading) {
+    return <Loader />; // Show loader while data is being fetched
+  }
 
   return (
     <div className="dashboard-container">
@@ -41,7 +83,7 @@ const AdminDashboard = () => {
         <h3>Sales Dashboard</h3>
       </div>
       <div className="dashboard-panel">
-        {initialPanelData.map((data) => (
+        {panelData.map((data) => (
           <Cards
             key={data.id}
             heading={data.heading}
@@ -51,7 +93,7 @@ const AdminDashboard = () => {
         ))}
       </div>
       <div className="dashboard-cards-panel2">
-        {initialApptDashCardsData.map((data, index) => (
+        {apptDashCardsData.map((data, index) => (
           <ApptDashCards
             key={index}
             status={data.status}
@@ -63,7 +105,10 @@ const AdminDashboard = () => {
       {/* Charts */}
       <div className="admin-sales-chart-section">
         <div className="admin-sales-chart-box">
-          <AdminSalesChart totalSales={0} />
+          <AdminSalesChart
+            totalSales={panelData.find((item) => item.heading === "Total Sales")?.panelinfo || 0}
+            weeklyRecord={weeklyRecord} // Pass weekly record data here
+          />
         </div>
         <div className="admin-service-list-box">
           <div className="admin-services-list">
@@ -81,7 +126,8 @@ const AdminDashboard = () => {
                     <td>{service.name}</td>
                     <td>
                       <span
-                        className={`amdin-sales-percentage admin-color-${service.sales}`}
+                        className="admin-sales-percentage"
+                        style={{ backgroundColor: service.color }} // Apply the color here
                       >
                         {service.sales}%
                       </span>

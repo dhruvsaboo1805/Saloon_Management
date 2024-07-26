@@ -30,18 +30,19 @@ const ClientInfo = () => {
               name: client.name || "",
               email: client.email || "",
               phone: client.phone || "",
-              gender: client.gender === 'M' ? 'Male' : "Female" || "",
+              gender: client.gender === "M" ? "Male" : "Female" || "",
               pincode: client.pincode || "",
             };
           })
-          .filter(client =>
-            client !== null &&
-            client.name &&
-            client.email &&
-            client.phone &&
-            client.gender &&
-            client.pincode
-          ); // Filter out any null entries and empty/default fields
+          .filter(
+            (client) =>
+              client !== null &&
+              client.name &&
+              client.email &&
+              client.phone &&
+              client.gender &&
+              client.pincode
+          );
 
         setClients(formattedClients);
         setLoading(false);
@@ -59,12 +60,19 @@ const ClientInfo = () => {
     try {
       const response = await axios.post(client_info_url, { phone });
       const data = response.data;
-
+  
       console.log("Response data:", data);
-
+  
       if (data.sucess) {
-        setServices(data.services);
-        console.log("Services fetched:", data.services);
+        const allServices = [];
+        Object.values(data).forEach((appointment) => {
+          if (appointment.services) {
+            allServices.push(...appointment.services);
+          }
+        });
+  
+        setServices(allServices);
+        console.log("Services fetched:", allServices);
         setShowPopup(true);
       } else {
         console.error("Failed to fetch client details.");
@@ -73,6 +81,7 @@ const ClientInfo = () => {
       console.error("Error fetching client details: ", error);
     }
   };
+  
 
   const columns = React.useMemo(
     () => [
@@ -97,10 +106,11 @@ const ClientInfo = () => {
     []
   );
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
-    columns,
-    data: clients,
-  });
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable({
+      columns,
+      data: clients,
+    });
 
   if (loading) {
     return <Loader />;
@@ -111,21 +121,25 @@ const ClientInfo = () => {
       <h1>Client Information</h1>
       <table {...getTableProps()} className="client-info-table">
         <thead>
-          {headerGroups.map(headerGroup => (
+          {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
-              {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()} key={column.id}>{column.render('Header')}</th>
+              {headerGroup.headers.map((column) => (
+                <th {...column.getHeaderProps()} key={column.id}>
+                  {column.render("Header")}
+                </th>
               ))}
             </tr>
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map(row => {
+          {rows.map((row) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()} key={row.id}>
-                {row.cells.map(cell => (
-                  <td {...cell.getCellProps()} key={cell.column.id}>{cell.render('Cell')}</td>
+                {row.cells.map((cell) => (
+                  <td {...cell.getCellProps()} key={cell.column.id}>
+                    {cell.render("Cell")}
+                  </td>
                 ))}
               </tr>
             );
@@ -136,10 +150,10 @@ const ClientInfo = () => {
       {showPopup && (
         <div className="client-popup">
           <div className="client-popup-content">
-            <h2>Service IDs</h2>
-            <ul>
+            <h2>Services</h2>
+            <ul className="service-list">
               {services.map((service, index) => (
-                <li key={index}>{service}</li>
+                <li key={index} className="service-item">{service}</li>
               ))}
             </ul>
             <button className="client-info-button" onClick={() => setShowPopup(false)}>Close</button>

@@ -151,3 +151,46 @@
   margin-top: 10px;
 }
 
+.admin-employee-heading-delete-popup {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.admin-employee-heading-delete-popup h2 {
+  font-size: 24px;
+  color: #d9534f; /* red color for emphasis */
+}
+
+.admin-employee-form-buttons-delete-popup {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.admin-employee-form-buttons-delete-popup button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.admin-employee-form-buttons-delete-popup button:first-of-type {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.admin-employee-form-buttons-delete-popup button:first-of-type:hover {
+  background-color: #dcdcdc;
+}
+
+.admin-employee-form-buttons-delete-popup button:last-of-type {
+  background-color: #d9534f;
+  color: #fff;
+}
+
+.admin-employee-form-buttons-delete-popup button:last-of-type:hover {
+  background-color: #c9302c;
+}
+

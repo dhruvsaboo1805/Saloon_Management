@@ -57,19 +57,20 @@
 }
 
 /* Modal styles */
-.admin-modal {
-  position: absolute;
+.admin-service-Modal {
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background: white;
   padding: 20px;
   border-radius: 10px;
-  width: 500px;
+  width: 50%;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1001; /* Ensure modal is on top */
 }
 
-.admin-modal-overlay {
+.admin-service-Overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -81,38 +82,57 @@
 }
 
 /* Modal heading */
-.admin-services-subheading-popup {
+.admin-services-heading {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
 }
 
-.admin-services-img-subheading-popup {
+.admin-services-heading button{
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.admin-service-heading{
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.admin-service-add-image {
   width: 40px;
   height: 40px;
 }
 
-/* Form styles */
-.admin-employee-form-group {
-  margin-bottom: 15px;
+.admin-service-heading h2 {
+  margin: 0;
 }
 
-.admin-modal .form-group {
+/* Form styles */
+.admin-service-form-group {
+  margin-bottom: 15px;
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  justify-content: space-between;
 }
 
-.admin-modal .form-group label {
+.admin-service-form-group label {
   margin-right: 10px;
   font-weight: bold;
   flex-basis: 30%;
   text-align: left;
 }
 
-.admin-modal .form-group input,
-.admin-modal .form-group textarea {
+.admin-service-form-group input[type="text"],
+.admin-service-form-group input[type="file"],
+.admin-service-form-group input[type="number"],
+.admin-service-form-group textarea {
   padding: 10px;
   font-size: 14px;
   border: 1px solid #ccc;
@@ -121,7 +141,7 @@
 }
 
 /* Image upload styles */
-.admin-employee-image-upload {
+.admin-service-image-upload {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -132,26 +152,33 @@
   background-color: #f9f9f9;
 }
 
-.admin-employee-image-upload img {
+.admin-add-image {
   max-width: 70px;
   max-height: 70px;
   border-radius: 50%;
 }
 
-.admin-employee-image-upload-text {
-  color: rgba(0, 0, 0, 0.5); /* Slightly transparent text color */
+.admin-service-image-upload span {
+  color: rgba(0, 0, 0, 0.5);
   font-size: 16px;
   text-align: center;
 }
 
-/* Buttons */
-.admin-modal .form-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
+.admin-service-image-upload:hover {
+  border-color: #007bff;
 }
 
-.admin-modal .form-buttons button {
+.admin-service-image-upload img {
+  margin-right: 20px;
+}
+
+/* Buttons */
+.admin-service-form-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.admin-service-form-group button {
   padding: 10px 20px;
   font-size: 14px;
   border: none;
@@ -159,46 +186,49 @@
   cursor: pointer;
 }
 
-.admin-modal .form-buttons button[type="button"] {
+.admin-service-form-group button[type="button"] {
   background-color: #6c757d;
   color: white;
 }
 
-.admin-modal .form-buttons button[type="button"]:hover {
+.admin-service-form-group button[type="button"]:hover {
   background-color: #5a6268;
 }
 
-.admin-modal .form-buttons button[type="submit"] {
+.admin-service-form-group button[type="submit"] {
   background-color: #007bff;
   color: white;
 }
 
-.admin-modal .form-buttons button[type="submit"]:hover {
+.admin-service-form-group button[type="submit"]:hover {
   background-color: #0056b3;
 }
 
-/* Heading styles */
-.admin-services-heading {
-  padding: 1.5rem;
+.service_name-disabled{
+  cursor: not-allowed;
+}
+
+.admin-employee-heading-delete-popup {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.admin-employee-heading-delete-popup h2 {
+  font-size: 24px;
+  color: #d9534f; /* red color for emphasis */
+}
+
+.admin-employee-form-buttons-delete-popup {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
-.admin-services-heading h2 {
-  margin: 0;
-}
-
-.admin-services-heading button {
+.admin-employee-form-buttons-delete-popup button {
   padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
-}
-
-.admin-services-heading button:hover {
-  background-color: #0056b3;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
 }
