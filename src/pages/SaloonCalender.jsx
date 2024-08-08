@@ -34,12 +34,13 @@ const timeSlots = [
   "20:30",
 ];
 
-const services = {
-  "1721372236692ch786543": "hair-colouring",
-  "1721372178803ch786543": "beard-grooming",
-  "1721294571091Da786543": "blow-dry",
-  "1721298452876Dh786543": "balinese-massage",
-  "1721372872117hu786543": "hair-cut",
+const getRandomColor = () => {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
 };
 
 const SaloonCalender = () => {
@@ -54,7 +55,12 @@ const SaloonCalender = () => {
         const employeeData = response.data;
         const employeeArray = Object.keys(employeeData)
           .filter((key) => key !== "success")
-          .map((key) => ({ id: key, name: employeeData[key]?.name, role: "" }));
+          .map((key) => ({
+            id: key,
+            name: employeeData[key]?.name,
+            designation: employeeData[key]?.designation,
+            imgUrl: employeeData[key]?.imgUrl,
+          }));
 
         setEmployees(employeeArray);
       } catch (error) {
@@ -65,7 +71,12 @@ const SaloonCalender = () => {
     const fetchAppointments = async () => {
       try {
         const response = await axios.post(apiurl, {
-          date: currentDate.toISOString().split("T")[0].split("-").reverse().join("-"),
+          date: currentDate
+            .toISOString()
+            .split("T")[0]
+            .split("-")
+            .reverse()
+            .join("-"),
         });
         setAppointments(response.data || {});
       } catch (error) {
@@ -104,16 +115,50 @@ const SaloonCalender = () => {
     return `${adjustedHour}:${minuteInt < 10 ? `0${minuteInt}` : minuteInt} ${ampm}`;
   };
 
-  const getAppointmentStyle = (serviceId) => {
-    return services[serviceId] || "default-service";
+  const getMergedAppointments = () => {
+    const merged = {};
+    employees.forEach((employee) => {
+      merged[employee.id] = [];
+      let lastEnd = null;
+
+      Object.entries(appointments).forEach(([timeSlot, employeeData]) => {
+        const appointment = employeeData[employee.id];
+        if (appointment) {
+          const [hours, minutes] = appointment.time.split(":");
+          const startTime = new Date(currentDate);
+          startTime.setHours(hours, minutes, 0, 0);
+          const durationMinutes = appointment.duration;
+          const endTime = new Date(startTime.getTime() + durationMinutes * 60000);
+
+          if (!lastEnd || startTime > lastEnd) {
+            // Add new appointment block
+            merged[employee.id].push({
+              start: appointment.time,
+              end: `${endTime.getHours()}:${String(endTime.getMinutes()).padStart(2, "0")}`,
+              details: appointment,
+            });
+            lastEnd = endTime;
+          }
+        }
+      });
+    });
+    return merged;
   };
+
+  const mergedAppointments = getMergedAppointments();
 
   return (
     <div className="employee-calendar">
       <div className="calendar-controls">
-        <button onClick={handlePrevDay} className="nav-button">&lt;</button>
-        <button onClick={handleToday} className="nav-button">Today</button>
-        <button onClick={handleNextDay} className="nav-button">&gt;</button>
+        <button onClick={handlePrevDay} className="nav-button">
+          &lt;
+        </button>
+        <button onClick={handleToday} className="nav-button">
+          Today
+        </button>
+        <button onClick={handleNextDay} className="nav-button">
+          &gt;
+        </button>
         <div className="date-display">
           <DatePicker
             selected={currentDate}
@@ -122,11 +167,21 @@ const SaloonCalender = () => {
             className="styled-date-picker"
           />
         </div>
-        <button className="add-button">Add New</button>
       </div>
-      <div className="employee-body">
+      <div className="employee-list">
+        {employees.map((employee) => (
+          <div key={employee.id} className="employee-item">
+            <img
+              src={employee.imgUrl}
+              alt={employee.name}
+              className="employee-image"
+            />
+            <span className="employee-name">{employee.name}</span>
+          </div>
+        ))}
+      </div>
+      <div className="calendar-body">
         <div className="employee-time-slots">
-          <h3 className="calendar-separation">Time-Slots</h3>
           {timeSlots.map((slot, index) => (
             <div key={index} className="employee-time-slot">
               {convertTo12HourFormat(slot)}
@@ -136,26 +191,34 @@ const SaloonCalender = () => {
         <div className="employee-columns">
           {employees.map((employee) => (
             <div key={employee.id} className="employee-column">
-              <div className="employee-column-header">
-                <strong>{employee.name}</strong>
-              </div>
-              <div className="employee-appointments">
-                {timeSlots.map((slot) => (
-                  <div key={slot} className="employee-appointment-slot">
-                    {appointments[slot] && appointments[slot][employee.id] ? (
-                      <div
-                        className={`employee-appointment ${getAppointmentStyle(
-                          appointments[slot][employee.id]
-                        )}`}
-                      >
-                        <span>{convertTo12HourFormat(slot)}</span>
-                        <br />
-                        <span>{services[appointments[slot][employee.id]]}</span>
-                      </div>
-                    ) : null}
+              {mergedAppointments[employee.id].map((block, index) => {
+                const startIndex = timeSlots.indexOf(block.start);
+                const duration = Math.ceil(block.details.duration / 30);
+                return (
+                  <div
+                    key={index}
+                    className="employee-appointment-slot"
+                    style={{
+                      gridRowStart: startIndex + 1,
+                      gridRowEnd: `span ${duration}`,
+                    }}
+                  >
+                    <div
+                      className="employee-appointment"
+                      style={{ backgroundColor: getRandomColor() }}
+                    >
+                      <span>
+                        {convertTo12HourFormat(block.start)} -{" "}
+                        {convertTo12HourFormat(block.end)}
+                      </span>
+                      <br />
+                      <span>{block.details.services.join(", ")}</span>
+                      <br />
+                      <span>{employee.name}</span>
+                    </div>
                   </div>
-                ))}
-              </div>
+                );
+              })}
             </div>
           ))}
         </div>

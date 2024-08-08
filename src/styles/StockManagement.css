@@ -122,6 +122,7 @@
   width: 100%;
   padding: 8px;
   box-sizing: border-box;
+  border: 1px solid #ddd;
 }
 
 .stock-image-upload {
@@ -129,20 +130,20 @@
   align-items: center;
 }
 
-.stock-image-upload input[type="file"] {
+/* .stock-image-upload input[type="file"] {
   display: none;
-}
+} */
 
-.stock-image-upload::before {
-  content: "Click to upload or drag and drop";
-  display: inline-block;
-  background-color: #f8f9fa;
-  padding: 10px;
-  border: 2px dashed #dee2e6;
-  border-radius: 5px;
+.stock-image-preview-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+  width: 400px;
+  border: 2px dashed #ddd;
+  margin-top: 10px;
+  position: relative;
   cursor: pointer;
-  width: 100%;
-  text-align: center;
 }
 
 .stock-image-preview {
@@ -152,9 +153,19 @@
   object-fit: cover;
 }
 
+.stock-placeholder-text {
+  color: #888;
+}
+
+.stock-image-name {
+  margin-top: 10px;
+  margin-left: 1rem;
+}
+
 .stock-modal-buttons {
   display: flex;
   justify-content: space-between;
+  margin-top: 1.5rem;
 }
 
 .stock-modal-buttons button {
@@ -180,4 +191,8 @@
 
 .stock-modal-buttons button:last-of-type:hover {
   background-color: #0056b3;
+}
+
+.edit-modal-product-name{
+  cursor: not-allowed;
 }
